@@ -36,6 +36,8 @@ If `.releaserc` does not exist on the working directory, the code will run with 
 ```yaml
 jobs:
   release:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
