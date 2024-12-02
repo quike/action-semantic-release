@@ -53,11 +53,11 @@ runs:
         yarn install --frozen-lockfile
         COMMAND=""
         if [ -n "$DRY_RUN" ] && [ "$DRY_RUN" = true ]; then
-          print "DRY_RUN enabled: $DRY_RUN"
+          echo "DRY_RUN enabled: $DRY_RUN"
           COMMAND="$COMMAND --dry-run"
         fi
         if [ -n "$DEBUG_MODE" ] && [ "$DEBUG_MODE" = true ]; then
-          print "DEBUG_MODE enabled: $DEBUG_MODE"
+          echo DEBUG_MODE enabled: $DEBUG_MODE"
           COMMAND="$COMMAND --debug"
         fi
         npx semantic-release ${COMMAND}
