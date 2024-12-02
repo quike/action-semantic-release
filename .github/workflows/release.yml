@@ -22,7 +22,6 @@ jobs:
           token: ${{ secrets.GHTOKEN }}
           debugMode: true
           dryRun: false
-          defaultConfigEnabled: true
     outputs:
       version: ${{ steps.release.outputs.version }}
       tag: ${{ steps.release.outputs.tag }}

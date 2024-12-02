@@ -50,8 +50,8 @@ runs:
       id: release
       shell: bash
       run: |
-        yarn install --frozen-lockfile
-        COMMAND=""
+        npm install --save-dev
+        COMMAND="npx semantic-release"
         if [ -n "$DRY_RUN" ] && [ "$DRY_RUN" = true ]; then
           echo "DRY_RUN enabled: $DRY_RUN"
           COMMAND="$COMMAND --dry-run"
@@ -60,7 +60,8 @@ runs:
           echo DEBUG_MODE enabled: $DEBUG_MODE"
           COMMAND="$COMMAND --debug"
         fi
-        npx semantic-release ${COMMAND}
+        echo "Execution arguments: ${COMMAND}"
+        ${COMMAND}
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
         DRY_RUN: ${{ inputs.dryRun }}
