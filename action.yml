@@ -57,7 +57,7 @@ runs:
           COMMAND="$COMMAND --dry-run"
         fi
         if [ -n "$DEBUG_MODE" ] && [ "$DEBUG_MODE" = true ]; then
-          echo DEBUG_MODE enabled: $DEBUG_MODE"
+          echo "DEBUG_MODE enabled: $DEBUG_MODE"
           COMMAND="$COMMAND --debug"
         fi
         echo "Execution arguments: ${COMMAND}"
