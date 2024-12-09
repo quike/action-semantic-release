@@ -38,7 +38,7 @@ outputs:
 
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: "docker://ghcr.io/quike/action-semantic-release:1"
   env:
     GH_TOKEN: ${{ inputs.token }}
     DRY_RUN: ${{ inputs.dry-run }}

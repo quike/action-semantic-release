@@ -73,9 +73,9 @@ The following piece of code is an example used in the default configuration. Thi
 
 #### Action Variables
 
-| _Variable_                 | _Default_               | _Details_                     |
-| -------------------------- | ----------------------- | ----------------------------- |
-| **token**                  | `GH_TOKEN` GitHub Token | GitHub Enterprise User Token. |
-| **debug-mode**             | `false`                 | To enable verbosity           |
-| **dry-run**                | `false`                 | Dry Run execution             |
-| **default-config-enabled** | `true`                  | Dry Run execution             |
+| _Variable_                 | _Default_               | _Details_                           |
+| -------------------------- | ----------------------- | ----------------------------------- |
+| **token**                  | `GH_TOKEN` GitHub Token | GitHub Enterprise User Token.       |
+| **debug-mode**             | `false`                 | To enable verbosity                 |
+| **dry-run**                | `false`                 | Dry Run execution                   |
+| **default-config-enabled** | `true`                  | Force default config if not present |
