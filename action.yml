@@ -1,0 +1,49 @@
+name: "action-semantic-release"
+description: "Github action to release projects using semanti-release"
+author: "quike"
+
+branding:
+  icon: activity
+  color: yellow
+
+inputs:
+  dry-run:
+    description: "The objective of the dry-run mode is to get a preview of the pending release. Dry-run mode skips the following steps: prepare, publish, addChannel, success and fail. In addition to this it prints the next version and release notes to the console."
+    required: false
+    default: "false"
+  token:
+    description: "GitHub Token"
+    required: true
+  working-path:
+    description: "Working directory where configuration file lives"
+    required: false
+    default: "${{ github.workspace }}"
+  debug-mode:
+    description: "Enable verbosity mode"
+    required: false
+    default: "false"
+  default-config-enabled:
+    description: "Uses predefined configuration if config files are not present."
+    required: false
+    default: "true"
+  event-name:
+    description: "Defines the event triggering the run."
+    default: "${{ github.event_name }}"
+
+outputs:
+  release-version:
+    description: "New version or current version if not released, example: 1.2.3"
+  git-head:
+    description: "SHA value associated to release commit."
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  env:
+    GH_TOKEN: ${{ inputs.token }}
+    DRY_RUN: ${{ inputs.dry-run }}
+    DEBUG_MODE: ${{ inputs.debug-mode }}
+    DEFAULT_CONFIG_ENABLED: ${{ inputs.default-config-enabled }}
+    EVENT_NAME: ${{ inputs.event-name }}
+  args:
+    - ${{ inputs.working-path }}

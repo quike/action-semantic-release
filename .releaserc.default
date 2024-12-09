@@ -1,0 +1,20 @@
+{
+  "branches": [
+    {"name": "master"},
+    {"name": "main"}
+  ],
+  "plugins": [
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/git",
+    ["@semantic-release/commit-analyzer", {
+      "preset": "conventionalcommits"
+    }],
+    ["@semantic-release/exec",
+      {
+        "publishCmd": "echo 'VERSION=${nextRelease.version}' >> $GITHUB_OUTPUT",
+        "verifyReleaseCmd": "echo ${nextRelease.version} > .release-version"
+      }
+    ]
+  ],
+  "preset": "conventionalcommits"
+}
