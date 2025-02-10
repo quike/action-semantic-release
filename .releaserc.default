@@ -5,6 +5,14 @@
   ],
   "preset": "conventionalcommits",
   "plugins": [
+    ["semantic-release-unsquash", {
+      "commitAnalyzerConfig": {
+        "preset": "conventionalcommits"
+      },
+      "notesGeneratorConfig": {
+        "preset": "conventionalcommits"
+      }
+    }],
     ["@semantic-release/commit-analyzer", {
       "preset": "conventionalcommits"
     }],
