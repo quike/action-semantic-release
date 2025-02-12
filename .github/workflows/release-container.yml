@@ -1,8 +1,9 @@
-name: Release Workflow
+name: Release Container
 
 on:
   release:
     types: [published] # Other types: created, edited, deleted, prereleased, released, etc.
+
   pull_request:
     branches:
       - main
@@ -14,20 +15,8 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  release-verifier:
-    runs-on: ubuntu-24.04
-    if: ${{ github.event_name != 'pull_request' }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Run release script
-        run: |
-          echo "Release version: ${{ github.event.release.tag_name }}"
-          echo "Release published by: ${{ github.event.release.author.login }}"
-
   build-and-push-image:
-    needs: release-verifier
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
@@ -36,6 +25,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Run release script
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          echo "Release version: ${{ github.event.release.tag_name }}"
+          echo "Release published by: ${{ github.event.release.author.login }}"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
