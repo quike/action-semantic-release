@@ -31,7 +31,7 @@ config() {
   npm link @actions/core
   bash -c "git config --global --add safe.directory \$PWD"
   CONFIG_EXISTS=false
-  DEFAULT_CONFIG="/usr/src/config/.releaserc.default"
+  DEFAULT_CONFIG="/.releaserc.default"
   CONFIG_FILES=".releaserc .releaserc.json .releaserc.yaml .releaserc.yml .releaserc.js .releaserc.cjs release.config.js release.config.cjs"
   for CONF_FILE in ${CONFIG_FILES}; do
     if [ -e "${CONF_FILE}" ]; then
