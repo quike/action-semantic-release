@@ -19,11 +19,15 @@ RUN apk add --no-cache --update \
   git \
   jq
 
+# Set an environment variable using the build argument
+ENV WORKING_DIR=${WORKING_PATH}
+WORKDIR $WORKING_DIR
+
 COPY package.json /global-package.json
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 RUN jq -r '.dependencies | keys | join(" ")' < /global-package.json | xargs npm install -g
 
-COPY entrypoint.sh /entrypoint.sh
-COPY .releaserc.default /.releaserc.default
+COPY entrypoint.sh ${WORKING_DIR}/entrypoint.sh
+COPY .releaserc.default ${WORKING_DIR}/.releaserc.default
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "-c", "$WORKING_DIR/entrypoint.sh"]

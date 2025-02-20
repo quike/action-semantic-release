@@ -20,4 +20,11 @@ release: config
 	@echo "Execute entrypoint"
 	./entrypoint.sh
 
+.PHONY: docker-build
+docker-build:
+	docker build -t $(OWNER)/$(COMPONENT):$(VERSION) .
+
+.PHONY: docker-run
+docker-run:
+	docker run --rm -it -v $(PWD):/github/workspace -e GH_TOKEN=$GH_TOKEN -d $(OWNER)/$(COMPONENT):$(VERSION)
 
