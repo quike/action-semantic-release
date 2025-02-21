@@ -17,7 +17,7 @@ inputs:
   working-path:
     description: "Working directory where configuration file lives"
     required: false
-    default: ${{ inputs.working-path }}
+    default: ${{ github.workspace }}
   debug-mode:
     description: "Enable verbosity mode"
     required: false
