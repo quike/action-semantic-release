@@ -12,16 +12,15 @@
   ],
   "dependencies": {
     "@actions/core": "1.11.1",
-    "@semantic-release/exec": "6.0.3",
+    "@semantic-release/exec": "7.0.3",
     "@semantic-release/git": "10.0.1",
     "@semantic-release/npm": "12.0.1",
     "conventional-changelog-conventionalcommits": "8.0.0",
     "conventional-changelog-ember": "5.0.0",
     "conventional-changelog-eslint": "6.0.0",
     "save-dev": "0.0.1-security",
-    "semantic-release": "24.2.0",
-    "semantic-release-slack-bot": "4.0.2",
-    "semantic-release-unsquash": "0.2.0"
+    "semantic-release": "24.2.3",
+    "semantic-release-slack-bot": "4.0.2"
   },
   "devDependencies": {
     "standard": "17.1.2"
