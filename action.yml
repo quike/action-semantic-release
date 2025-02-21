@@ -17,7 +17,7 @@ inputs:
   working-path:
     description: "Working directory where configuration file lives"
     required: false
-    default: "/github/workspace"
+    default: ${{ inputs.working-path }}
   debug-mode:
     description: "Enable verbosity mode"
     required: false
@@ -38,7 +38,7 @@ outputs:
 
 runs:
   using: "docker"
-  image: "docker://ghcr.io/quike/action-semantic-release:1"
+  image: "docker://ghcr.io/quike/action-semantic-release:1.2.6"
   env:
     GH_TOKEN: ${{ inputs.token }}
     DRY_RUN: ${{ inputs.dry-run }}
@@ -46,4 +46,5 @@ runs:
     DEFAULT_CONFIG_ENABLED: ${{ inputs.default-config-enabled }}
     EVENT_NAME: ${{ inputs.event-name }}
   args:
+    - "--working-path"
     - ${{ inputs.working-path }}
