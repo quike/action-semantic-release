@@ -24,7 +24,7 @@ verify_parameter() {
 verify_requirements() {
   print "${FUNCNAME[0]}"
   verify_parameter "${GH_TOKEN}" "GH_TOKEN" "true"
-  verify_parameter "${WORKING_DIR}" "WORKING_DIR" "false"
+  verify_parameter "${WORKING_PATH}" "WORKING_PATH" "false"
   if [ -n "$DEBUG_MODE" ] && [ "$DEBUG_MODE" = true ]; then
     pwd
     print "Working Path=${WORKING_PATH}"
