@@ -46,5 +46,4 @@ runs:
     DEFAULT_CONFIG_ENABLED: ${{ inputs.default-config-enabled }}
     EVENT_NAME: ${{ inputs.event-name }}
   args:
-    - "--working-path"
     - ${{ inputs.working-path }}
