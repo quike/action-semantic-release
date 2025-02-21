@@ -27,9 +27,7 @@ verify_requirements() {
   verify_parameter "${WORKING_PATH}" "WORKING_PATH" "false"
   if [ -n "$DEBUG_MODE" ] && [ "$DEBUG_MODE" = true ]; then
     pwd
-    print "Working Path=${WORKING_PATH}"
     ls -la
-    whoami
   fi
 }
 
@@ -38,7 +36,7 @@ config() {
   npm link @actions/core
   bash -c "git config --global --add safe.directory \$PWD"
   CONFIG_EXISTS=false
-  DEFAULT_CONFIG="${WORKING_PATH}/.releaserc.default"
+  DEFAULT_CONFIG="/etc/action/.releaserc.default"
   CONFIG_FILES=".releaserc .releaserc.json .releaserc.yaml .releaserc.yml .releaserc.js .releaserc.cjs release.config.js release.config.cjs"
   for CONF_FILE in ${CONFIG_FILES}; do
     if [ -e "${CONF_FILE}" ]; then
@@ -52,7 +50,7 @@ config() {
     if [ -n "$DEFAULT_CONFIG_ENABLED" ] && [ "$DEFAULT_CONFIG_ENABLED" = true ]; then
       print "DEFAULT_CONFIG_ENABLED: $DEFAULT_CONFIG_ENABLED. Copying default config."
       if [ -e "${DEFAULT_CONFIG}" ]; then
-        ln -s "${DEFAULT_CONFIG}" ".releaserc"
+        ln -s "${DEFAULT_CONFIG}" "${WORKING_PATH}/.releaserc"
       else
         print "Unable to find default config file ${DEFAULT_CONFIG}"
       fi
