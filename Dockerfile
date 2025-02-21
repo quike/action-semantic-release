@@ -27,7 +27,8 @@ COPY package.json /global-package.json
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 RUN jq -r '.dependencies | keys | join(" ")' < /global-package.json | xargs npm install -g
 
-COPY entrypoint.sh ${WORKING_PATH}}/entrypoint.sh
-COPY .releaserc.default ${WORKING_PATH}}/.releaserc.default
+COPY --chmod=555 entrypoint.sh ${WORKING_PATH}}/entrypoint.sh
+COPY --chmod=444 .releaserc.default ${WORKING_PATH}}/.releaserc.default
+RUN chmod +x ${WORKING_PATH}/entrypoint.sh
 
 ENTRYPOINT ["/bin/bash", "-c", "$WORKING_PATH/entrypoint.sh"]
