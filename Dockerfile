@@ -32,4 +32,4 @@ RUN chmod +x "${WORKING_PATH}/entrypoint.sh"
 
 WORKDIR ${WORKING_PATH}
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
