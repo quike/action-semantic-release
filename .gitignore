@@ -155,4 +155,8 @@ test-*.sh
 super-linter.log
 node_modules/
 mise.toml
-.env
+__snapshots__/
+coverage/
+dist/
+target/
+test/action.yml

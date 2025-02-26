@@ -10,15 +10,10 @@
       {
         "preset": "conventionalcommits"
       }
-    ],
-    [
-      "@semantic-release/exec",
-      {
-        "publishCmd": "echo 'VERSION=${nextRelease.version}' >> $GITHUB_ENV",
-        "verifyReleaseCmd": "echo ${nextRelease.version} > .VERSION"
-      }
-    ],
-    "./src/index.js"
+    ]
   ],
-  "preset": "conventionalcommits"
+  "preset": "conventionalcommits",
+  "debug": true,
+  "dryRun": false,
+  "ci": false
 }
