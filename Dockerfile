@@ -1,7 +1,8 @@
+FROM node:20.18.1-slim
 
-FROM node:20-alpine
-
-ARG WORKING_PATH="/github/workspace"
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates git jq \
+    && rm -rf /var/lib/apt/lists/*
 
 LABEL name="quike/semantic-release"
 LABEL maintainer="quike"
@@ -11,25 +12,15 @@ LABEL description="Fully automated version management and package publishing. A 
 ENV DRY_RUN=false
 ENV DEBUG_MODE=false
 
-RUN apk add --no-cache --update \
-  curl \
-  openssl \
-  openssh \
-  bash \
-  git \
-  jq
+RUN mkdir /etc/action
+WORKDIR /etc/action
 
-# Set an environment variable using the build argument
-ENV WORKING_PATH=${WORKING_PATH}
-
-COPY package.json /global-package.json
-SHELL ["/bin/ash", "-o", "pipefail", "-c"]
-RUN jq -r '.dependencies | keys | join(" ")' < /global-package.json | xargs npm install -g
-
-COPY --chmod=555 entrypoint.sh "/usr/local/bin/entrypoint.sh"
+COPY --chmod=555 entrypoint.sh "/etc/action/entrypoint.sh"
+COPY --chmod=444 src/ ./src/
 COPY --chmod=444 .releaserc.default "/etc/action/.releaserc.default"
-RUN chmod +x "usr/local/bin/entrypoint.sh"
+COPY ./package.json ./package-lock.json ./
+RUN chmod +x "/etc/action/entrypoint.sh"
+RUN npm ci --only=prod
 
-WORKDIR ${WORKING_PATH}
+ENTRYPOINT ["/etc/action/entrypoint.sh"]
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

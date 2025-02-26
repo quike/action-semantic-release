@@ -19,6 +19,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Node.js
+        id: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Install Dependencies
+        id: npm-ci
+        run: npm ci
+      - name: Check Format
+        id: npm-format-check
+        run: npm run format:check
+      - name: Lint
+        id: npm-lint
+        run: npm run lint
       - name: Set Test Environment
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
@@ -34,9 +49,11 @@ jobs:
         id: release
         uses: ./
         with:
-          token: ${{ secrets.GHTOKEN }}
           debug-mode: true
           dry-run: false
+          default-config-enabled: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHTOKEN }}
       - name: Get the output
         run: |
           echo "The release version is ${{ steps.release.outputs.release-version }}"
