@@ -57,4 +57,4 @@ jobs:
       - name: Get the output
         run: |
           echo "The release version is ${{ steps.release.outputs.release-version }}"
-          echo "The relese sha is ${{ steps.release.outputs.git-head }}"
+          echo "The relese sha is ${{ steps.release.outputs.release-git-head }}"
