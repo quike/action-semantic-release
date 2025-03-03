@@ -33,6 +33,14 @@ inputs:
     description: 'Create a GitHub Job Summary.'
     required: false
     default: 'true'
+  set-default-preset-info:
+    description:
+      'For presets that expects a configuration object, such as conventionalcommits, the presetConfig & releaseRules
+      options must be set. Some basic predefined configuration is available hardcoded in semanti-release, but for
+      conventionalcommits if no presetConfig and releaseRules are passed, it falls back to the default preset
+      configuration: angular ignoring the input.'
+    required: false
+    default: 'true'
 
 outputs:
   release-version:
@@ -59,9 +67,11 @@ runs:
     DEFAULT_CONFIG_ENABLED: ${{ inputs.default-config-enabled }}
     EVENT_NAME: ${{ inputs.event-name }}
     WORKING_PATH: ${{ inputs.working-path }}
+    SET_DEFAULT_PRESET_INFO: ${{ inputs.set-default-preset-info }}
   args:
     - ${{ inputs.working-path }}
     - ${{ inputs.dry-run }}
     - ${{ inputs.debug-mode }}
     - ${{ inputs.default-config-enabled }}
     - ${{ inputs.add-summary }}
+    - ${{ inputs.set-default-preset-info }}

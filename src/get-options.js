@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import { cleanObject } from './utils.js'
+import { getPlugins } from './get-plugins.js'
 
 /**
  * Retrieves and processes configuration options for the semantic release action.
@@ -24,7 +25,7 @@ export const getOptions = async (config) => {
   const options = {
     branches: config.branches || ['master', 'main'],
     repositoryUrl: config.repositoryUrl || '',
-    plugins: config.plugins || [],
+    plugins: getPlugins(config),
     ci: config.ci !== undefined ? config.ci : true,
     debug: debugModeInput !== undefined ? debugModeInput : config.debug !== undefined ? config.debug : true,
     dryRun: dryRunInput !== undefined ? dryRunInput : config.dryRun !== undefined ? config.dryRun : false,

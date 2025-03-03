@@ -4,11 +4,13 @@
     {"name": "main"}
   ],
   "plugins": [
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/git",
     ["@semantic-release/commit-analyzer", {
       "preset": "conventionalcommits"
-    }]
+    }],
+    ["@semantic-release/release-notes-generator", {
+      "preset": "conventionalcommits"
+    }],
+    "@semantic-release/git"
   ],
   "preset": "conventionalcommits",
   "debug": true,

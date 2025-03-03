@@ -57,7 +57,7 @@ describe('getOptions', () => {
     }
     const result = await getOptions(config)
     const expected = config
-    expect(result).toEqual(expected)
+    Ï(result).toEqual(expected)
     expect(core.info).toHaveBeenCalledWith(`Options: ${JSON.stringify(expected)}`)
   })
 
