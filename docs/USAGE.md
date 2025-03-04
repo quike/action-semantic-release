@@ -52,6 +52,7 @@ jobs:
           debug-mode: true
           dry-run: false
           default-config-enabled: true
+          default-preset-info: true
         env:
           token: ${{ secrets.GHTOKEN }}
     outputs:
