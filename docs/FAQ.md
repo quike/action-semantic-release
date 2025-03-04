@@ -2,7 +2,7 @@
 
 ## Configuration
 
-### 1. Not expected release types when preset is conventionalcommits.
+### **Not expected release types when preset is conventionalcommits**
 
 This is covered on
 [quike/action-semantic-release/issues/11](https://github.com/quike/action-semantic-release/issues/11).
