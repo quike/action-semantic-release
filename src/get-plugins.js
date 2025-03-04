@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { defaultPresetConfigs, getPresetConfig } from './default-preset-config.js'
+import { getPresetConfig } from './default-preset-config.js'
 import { getReleaseRules } from './default-release-rules.js'
 
 const PLUGIN_CONFIG = {
@@ -29,7 +29,7 @@ export const getPlugins = async (config) => {
     return plugins.map((plugin) => {
       if (
         Array.isArray(plugin) &&
-        PLUGIN_CONFIG.hasOwnProperty(plugin[0]) &&
+        Object.hasOwn(PLUGIN_CONFIG, plugin[0]) &&
         typeof plugin[1] === 'object' &&
         plugin[1] !== null &&
         'preset' in plugin[1] // Only modify if 'preset' exists
@@ -44,7 +44,7 @@ export const getPlugins = async (config) => {
         // Dynamically add required configuration properties based on the requiredConfig array
         requiredConfig.forEach((config) => {
           if (
-            !pluginConfig.hasOwnProperty(config) ||
+            !Object.hasOwn(pluginConfig, config) ||
             pluginConfig[config] == null ||
             Object.keys(pluginConfig[config]).length === 0
           ) {
