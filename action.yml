@@ -22,10 +22,6 @@ inputs:
     description: 'Enable verbosity mode'
     required: false
     default: 'false'
-  default-config-enabled:
-    description: 'Uses predefined configuration if config files are not present.'
-    required: false
-    default: 'true'
   event-name:
     description: 'Defines the event triggering the run.'
     default: '${{ github.event_name }}'
@@ -33,8 +29,22 @@ inputs:
     description: 'Create a GitHub Job Summary.'
     required: false
     default: 'true'
+  default-config-enabled:
+    description: 'Uses predefined configuration if config files are not present.'
+    required: false
+    default: 'true'
+  default-preset-info:
+    description:
+      'For presets that expects a configuration object, such as conventionalcommits, the presetConfig & releaseRules
+      options must be set. Some basic predefined configuration is available hardcoded in semanti-release, but for
+      conventionalcommits if no presetConfig and releaseRules are passed, it falls back to the default preset
+      configuration: angular ignoring the input.'
+    required: false
+    default: 'true'
 
 outputs:
+  release-publised:
+    description: 'True if a new release is performed, false otherwise.'
   release-version:
     description: 'New version or current version if not released, example: 1.2.3'
   release-major:
@@ -48,7 +58,7 @@ outputs:
   release-git-head:
     description: 'SHA value associated to release commit.'
   release-git-tag:
-    description: 'SHA value associated to release commit.'
+    description: 'Git Tag associated to release commit.'
 
 runs:
   using: 'docker'
@@ -56,12 +66,14 @@ runs:
   env:
     DRY_RUN: ${{ inputs.dry-run }}
     DEBUG_MODE: ${{ inputs.debug-mode }}
-    DEFAULT_CONFIG_ENABLED: ${{ inputs.default-config-enabled }}
     EVENT_NAME: ${{ inputs.event-name }}
     WORKING_PATH: ${{ inputs.working-path }}
+    DEFAULT_CONFIG_ENABLED: ${{ inputs.default-config-enabled }}
+    DEFAULT_PRESET_INFO: ${{ inputs.default-preset-info }}
   args:
     - ${{ inputs.working-path }}
     - ${{ inputs.dry-run }}
     - ${{ inputs.debug-mode }}
     - ${{ inputs.default-config-enabled }}
     - ${{ inputs.add-summary }}
+    - ${{ inputs.set-default-preset-info }}
