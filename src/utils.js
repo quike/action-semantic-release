@@ -45,3 +45,15 @@ export const cleanObject = (obj) => {
 
   return obj
 }
+
+export const getBooleanInput = (name, options) => {
+  const input = core.getBooleanInput(name, options)
+  core.info(`${name}: ${input}`)
+  return input !== undefined ? input : options.default
+}
+
+export const getInput = (name, options) => {
+  const input = core.getInput(name, options)
+  core.info(`${name}: ${input}`)
+  return input !== undefined && input !== '' ? input : options.default
+}

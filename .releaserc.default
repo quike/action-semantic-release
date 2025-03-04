@@ -12,6 +12,6 @@
   ],
   "preset": "conventionalcommits",
   "debug": true,
-  "dryRun": false,
+  "dryRun": true,
   "ci": false
 }
