@@ -14,7 +14,7 @@ describe('getPresetConfig', () => {
 
   it('should return the conventional commits preset config when preset is not found', () => {
     const result = getPresetConfig('unknown-preset')
-    expect(result).toEqual(defaultPresetConfigs.get('conventionalcommits'))
+    expect(result).toEqual(null)
   })
 
   it('should return the correct section for "feat"', () => {

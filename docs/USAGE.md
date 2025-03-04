@@ -18,9 +18,7 @@ Example (this content may change):
 
 ```json
 {
-  "branches": [
-    "main"
-  ],
+  "branches": ["main"],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
@@ -66,7 +64,7 @@ jobs:
 #### Action Variables
 
 | _Variable_                 | _Default_ | _Details_                                                                                  |
-|----------------------------|-----------|--------------------------------------------------------------------------------------------|
+| -------------------------- | --------- | ------------------------------------------------------------------------------------------ |
 | **add-summary**            | `true`    | Add a GitHub Job Summary with release details                                              |
 | **debug-mode**             | `false`   | To enable verbosity                                                                        |
 | **dry-run**                | `false`   | Dry Run execution                                                                          |
@@ -76,7 +74,7 @@ jobs:
 #### Environment Variables
 
 | _Variable_ | _Required_ | _Details_                                 |
-|------------|------------|-------------------------------------------|
+| ---------- | ---------- | ----------------------------------------- |
 | **token**  | `true`     | Required, as `GITHUB_TOKEN` or `GH_TOKEN` |
 
 ### Outputs
@@ -90,7 +88,7 @@ The Action will export multiple variables so they can be accessed within your wo
 ### Exported Variables
 
 | _Variable_                | _GitHub Action Output_    | _Example_                                  | _Details_                                          |
-|---------------------------|---------------------------|--------------------------------------------|----------------------------------------------------|
+| ------------------------- | ------------------------- | ------------------------------------------ | -------------------------------------------------- |
 | **NEW_RELEASE_PUBLISHED** | **new-release-published** | `true`                                     | True if a new release is publised, false otherwise |
 | **RELEASE_VERSION**       | **release-version**       | `1.2.3`                                    | The new SemVer version of type X.Y.Z               |
 | **RELEASE_MAJOR**         | **release-major**         | `1`                                        | Major value of the new SemVer version              |

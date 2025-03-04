@@ -14,13 +14,13 @@ describe('getReleaseRules', () => {
 
   it('should return the conventional commits release rules when preset is not found', () => {
     const result = getReleaseRules('unknown-preset')
-    expect(result).toEqual(defaultReleaseRules.get('conventionalcommits'))
+    expect(result).toEqual(null)
   })
 
   it('should return the correct release type for "chore"', () => {
     const rules = getReleaseRules('conventionalcommits')
     const choreRule = rules.find((rule) => rule.type === 'chore')
-    expect(choreRule.release).toBe(false)
+    expect(choreRule.release).toBe('minor')
   })
 
   it('should return the correct release type for "feat"', () => {

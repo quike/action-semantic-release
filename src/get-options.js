@@ -25,7 +25,7 @@ export const getOptions = async (config) => {
   const options = {
     branches: config.branches || ['master', 'main'],
     repositoryUrl: config.repositoryUrl || '',
-    plugins: getPlugins(config),
+    plugins: (await getPlugins(config)) || config.plugins || [],
     ci: config.ci !== undefined ? config.ci : true,
     debug: debugModeInput !== undefined ? debugModeInput : config.debug !== undefined ? config.debug : true,
     dryRun: dryRunInput !== undefined ? dryRunInput : config.dryRun !== undefined ? config.dryRun : false,
