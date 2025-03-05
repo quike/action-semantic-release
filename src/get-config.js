@@ -30,8 +30,6 @@ async function getDefaultConfig() {
  */
 export const getConfig = async (workDir) => {
   let defaultConfig = getBooleanInput(INPUTS.DEFAULT_CONFIG)
-  core.info(`default-config-enabled: ${defaultConfig}`)
-  defaultConfig = defaultConfig !== '' ? defaultConfig === true : ''
   const config = await cosmiconfig(CONFIG_NAME)
     .search(workDir)
     .then((result) => {
