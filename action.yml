@@ -1,5 +1,5 @@
 name: 'action-semantic-release'
-description: 'Github action to release projects using semanti-release'
+description: 'Github action to release projects using semantic-release'
 author: 'quike'
 
 branding:
@@ -41,9 +41,13 @@ inputs:
       configuration: angular ignoring the input.'
     required: false
     default: 'true'
+  floating-tags:
+    description: 'Create floating tags from major and minor versions after release.'
+    required: false
+    default: 'false'
 
 outputs:
-  release-publised:
+  release-published:
     description: 'True if a new release is performed, false otherwise.'
   release-version:
     description: 'New version or current version if not released, example: 1.2.3'
@@ -74,6 +78,7 @@ runs:
     - ${{ inputs.working-path }}
     - ${{ inputs.dry-run }}
     - ${{ inputs.debug-mode }}
-    - ${{ inputs.default-config-enabled }}
     - ${{ inputs.add-summary }}
-    - ${{ inputs.set-default-preset-info }}
+    - ${{ inputs.default-config-enabled }}
+    - ${{ inputs.default-preset-info }}
+    - ${{ inputs.floating-tags }}

@@ -4,6 +4,8 @@ import { getOptions } from './get-options.js'
 import { runSemanticRelease } from './semantic-release.js'
 import { setSummary } from './set-summary.js'
 import { verifyRelease } from './verify-release.js'
+import { setFloatingTags } from './set-floating-tags.js'
+import { getBooleanInput, getInput } from './utils.js'
 
 /**
  * The main function for the action.
@@ -12,8 +14,7 @@ import { verifyRelease } from './verify-release.js'
  */
 export async function run() {
   try {
-    let workingPathInput = core.getInput('working-path', { required: false }) || '{}'
-    core.info(`workingPath: ${workingPathInput}`)
+    let workingPathInput = getInput('working-path', { required: false, default: '{}' })
     let workDir = '.'
     if (workingPathInput !== '${{ github.workspace }}') {
       workDir = workingPathInput
@@ -29,11 +30,16 @@ export async function run() {
       if (!release) {
         core.error(`Error verifying release: ${release}`)
       }
-      let addSummaryInput = core.getBooleanInput('add-summary', { required: false })
-      core.info(`add-summary: ${addSummaryInput}`)
-      addSummaryInput = addSummaryInput !== '' ? addSummaryInput : false
-      if (addSummaryInput) {
-        await setSummary(release)
+      let dryRunInput = getBooleanInput('dry-run', { required: false, default: true })
+      if (dryRunInput) {
+        let floatingTagsInput = getBooleanInput('floating-tags', { required: false, default: false })
+        if (floatingTagsInput) {
+          await setFloatingTags(release, { cwd: workDir, env: process.env })
+        }
+        let addSummaryInput = getBooleanInput('add-summary', { required: false, default: false })
+        if (addSummaryInput) {
+          await setSummary(release)
+        }
       }
     }
   } catch (error) {
