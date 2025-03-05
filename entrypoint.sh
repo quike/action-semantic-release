@@ -55,6 +55,7 @@ validate() {
   echo "git-head=${CURRENT_SHA}" >>"$GITHUB_OUTPUT"
   echo "git-head=${CURRENT_SHA}" >>"$GITHUB_ENV"
   if [ -n "$EVENT_NAME" ] && [ "$EVENT_NAME" == "pull_request" ]; then
+    echo "Type of event: $EVENT_NAME"
     ORIGINAL_SHA=$(jq -r '.pull_request.head.sha' "$GITHUB_EVENT_PATH")
     echo "Original Pull Request Commit ID: $ORIGINAL_SHA"
     echo "HEAD is now at ${CURRENT_SHA} after Pull Request Commit Id merge with HEAD."

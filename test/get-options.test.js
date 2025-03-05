@@ -25,7 +25,7 @@ describe('getOptions', () => {
     const expected = {
       branches: ['master', 'main'],
       ci: true,
-      debug: false,
+      debug: true,
       dryRun: false
     }
     expect(result).toEqual(expected)
@@ -72,7 +72,7 @@ describe('getOptions', () => {
     const expected = {
       branches: ['master', 'main'],
       ci: true,
-      debug: false,
+      debug: true,
       dryRun: false,
       gitCredentials: {
         GIT_AUTHOR_NAME: 'Author Name',

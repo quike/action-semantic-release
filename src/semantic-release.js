@@ -15,8 +15,8 @@ export const runSemanticRelease = async (options, workdir) => {
   core.info(`Semantic Release Execution Result: ${JSON.stringify(result, null, 2)}`)
   if (!result) {
     core.debug('No release published')
-    core.exportVariable('NEW_RELEASE_PUBLISHED', 'false')
-    core.setOutput('new-release-published', 'false')
+    core.exportVariable('RELEASE_PUBLISHED', 'false')
+    core.setOutput('release-published', 'false')
   }
   return result
 }

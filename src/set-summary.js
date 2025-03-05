@@ -49,6 +49,12 @@ Handlebars.registerHelper('default', function (value, defaultValue) {
   return value != null && value !== '' ? value : defaultValue
 })
 
+/**
+ * Sets the summary of the action.
+ *
+ * @param {Object} release - The release information.
+ * @returns {Promise<void>} Resolves when the summary has been set.
+ */
 export const setSummary = async (release) => {
   const data = getTemplate({ release })
   core.info(JSON.stringify(release, null, 2))

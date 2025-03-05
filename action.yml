@@ -29,7 +29,7 @@ inputs:
     description: 'Create a GitHub Job Summary.'
     required: false
     default: 'true'
-  default-config-enabled:
+  default-config:
     description: 'Uses predefined configuration if config files are not present.'
     required: false
     default: 'true'
@@ -72,13 +72,13 @@ runs:
     DEBUG_MODE: ${{ inputs.debug-mode }}
     EVENT_NAME: ${{ inputs.event-name }}
     WORKING_PATH: ${{ inputs.working-path }}
-    DEFAULT_CONFIG_ENABLED: ${{ inputs.default-config-enabled }}
+    DEFAULT_CONFIG: ${{ inputs.default-config }}
     DEFAULT_PRESET_INFO: ${{ inputs.default-preset-info }}
   args:
     - ${{ inputs.working-path }}
     - ${{ inputs.dry-run }}
     - ${{ inputs.debug-mode }}
     - ${{ inputs.add-summary }}
-    - ${{ inputs.default-config-enabled }}
+    - ${{ inputs.default-config }}
     - ${{ inputs.default-preset-info }}
     - ${{ inputs.floating-tags }}

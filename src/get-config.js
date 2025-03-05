@@ -3,7 +3,8 @@ import * as core from '@actions/core'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import { promises as fs } from 'fs'
-import { parseInput } from './utils.js'
+import { getBooleanInput, parseInput } from './utils.js'
+import { INPUTS } from './constants.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -21,18 +22,22 @@ async function getDefaultConfig() {
   }
 }
 
+/**
+ * Retrieves the configuration object for the semantic release action.
+ *
+ * @param {string} workDir - The working directory.
+ * @returns {Promise<Object>} The configuration object.
+ */
 export const getConfig = async (workDir) => {
-  let defaultConfigEnabled = core.getBooleanInput('default-config-enabled', {
-    required: false
-  })
-  core.info(`defaultConfigEnabled: ${defaultConfigEnabled}`)
-  defaultConfigEnabled = defaultConfigEnabled !== '' ? defaultConfigEnabled === true : ''
+  let defaultConfig = getBooleanInput(INPUTS.DEFAULT_CONFIG)
+  core.info(`default-config-enabled: ${defaultConfig}`)
+  defaultConfig = defaultConfig !== '' ? defaultConfig === true : ''
   const config = await cosmiconfig(CONFIG_NAME)
     .search(workDir)
     .then((result) => {
       return result?.config
     })
-  if (!config && defaultConfigEnabled) {
+  if (!config && defaultConfig) {
     core.info('No config file found, using the default config')
     return await getDefaultConfig()
   }

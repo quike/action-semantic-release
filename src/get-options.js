@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
-import { cleanObject } from './utils.js'
+import { cleanObject, getBooleanInput } from './utils.js'
 import { getPlugins } from './get-plugins.js'
+import { INPUTS } from './constants.js'
 
 /**
  * Retrieves and processes configuration options for the semantic release action.
@@ -14,21 +15,22 @@ export const getOptions = async (config) => {
     return {}
   }
 
-  let dryRunInput = core.getBooleanInput('dry-run', { required: false })
-  core.info(`dry-run: ${dryRunInput}`)
-  dryRunInput = dryRunInput !== '' ? dryRunInput : false
-
-  let debugModeInput = core.getBooleanInput('debug-mode', { required: false })
-  core.info(`debug-mode: ${debugModeInput}`)
-  debugModeInput = debugModeInput !== '' ? debugModeInput === true : ''
+  let dryRunInput = getBooleanInput(INPUTS.DRY_RUN)
+  let debugModeInput = getBooleanInput(INPUTS.DEBUG_MODE)
 
   const options = {
     branches: config.branches || ['master', 'main'],
     repositoryUrl: config.repositoryUrl || '',
     plugins: (await getPlugins(config)) || config.plugins || [],
     ci: config.ci !== undefined ? config.ci : true,
-    debug: debugModeInput !== undefined ? debugModeInput : config.debug !== undefined ? config.debug : true,
-    dryRun: dryRunInput !== undefined ? dryRunInput : config.dryRun !== undefined ? config.dryRun : false,
+    debug:
+      config.debug !== undefined
+        ? config.debug
+        : debugModeInput !== undefined
+          ? debugModeInput
+          : INPUTS.DEBUG_MODE.default,
+    dryRun:
+      config.dryRun !== undefined ? config.dryRun : dryRunInput !== undefined ? dryRunInput : INPUTS.DRY_RUN.default,
     tagFormat: config.tagFormat || '',
     verifyConditions: config.verifyConditions || [],
     prepare: config.prepare || [],
