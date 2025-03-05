@@ -51,13 +51,15 @@ jobs:
         with:
           debug-mode: true
           dry-run: false
+          add-summary: true
           default-config-enabled: true
           default-preset-info: true
+          floating-tags: false
         env:
-          token: ${{ secrets.GHTOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GHTOKEN }}
     outputs:
       version: ${{ steps.release.outputs.release-version }}
-      git-head: ${{ steps.release.outputs.git-head }}
+      git-head: ${{ steps.release.outputs.release-git-head }}
 ```
 
 ### Parameters
@@ -89,13 +91,13 @@ The Action will export multiple variables so they can be accessed within your wo
 
 ### Exported Variables
 
-| _Variable_                | _GitHub Action Output_    | _Example_                                  | _Details_                                          |
-| ------------------------- | ------------------------- | ------------------------------------------ | -------------------------------------------------- |
-| **NEW_RELEASE_PUBLISHED** | **new-release-published** | `true`                                     | True if a new release is publised, false otherwise |
-| **RELEASE_VERSION**       | **release-version**       | `1.2.3`                                    | The new SemVer version of type X.Y.Z               |
-| **RELEASE_MAJOR**         | **release-major**         | `1`                                        | Major value of the new SemVer version              |
-| **RELEASE_MINOR**         | **release-minor**         | `2`                                        | Minor value of the new SemVer version              |
-| **RELEASE_PATCH**         | **release-patch**         | `3`                                        | Patch value of the new SemVer version              |
-| **RELEASE_TYPE**          | **type**                  | `patch`                                    | Type of SemVer release: major, minor or patch      |
-| **RELEASE_GIT_HEAD**      | **git-head**              | `cddc1177c51b518b3263b1b4f2b50af77dcf8be9` | Commig ID of the release                           |
-| **RELEASE_GIT_TAG**       | **name**                  | `v1.2.3`                                   | Tag ID associated with the release                 |
+| _Variable_            | _GitHub Action Output_ | _Example_                                  | _Details_                                           |
+| --------------------- | ---------------------- | ------------------------------------------ | --------------------------------------------------- |
+| **RELEASE_PUBLISHED** | **release-published**  | `true`                                     | True if a new release is published, false otherwise |
+| **RELEASE_VERSION**   | **release-version**    | `1.2.3`                                    | The new SemVer version of type X.Y.Z                |
+| **RELEASE_MAJOR**     | **release-major**      | `1`                                        | Major value of the new SemVer version               |
+| **RELEASE_MINOR**     | **release-minor**      | `2`                                        | Minor value of the new SemVer version               |
+| **RELEASE_PATCH**     | **release-patch**      | `3`                                        | Patch value of the new SemVer version               |
+| **RELEASE_TYPE**      | **release-type**       | `patch`                                    | Type of SemVer release: major, minor or patch       |
+| **RELEASE_GIT_HEAD**  | **release-git-head**   | `cddc1177c51b518b3263b1b4f2b50af77dcf8be9` | Commit ID of the release                            |
+| **RELEASE_GIT_TAG**   | **release-git-tag**    | `v1.2.3`                                   | Tag ID associated with the release                  |
