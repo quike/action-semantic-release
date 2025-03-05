@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, vi } from 'vitest'
 import * as core from '@actions/core'
 import { setFloatingTags } from '../src/set-floating-tags.js'
-import { tag } from 'semantic-release/lib/git'
+import { tag } from 'semantic-release/lib/git.js'
 
 vi.mock('@actions/core')
 vi.mock('semantic-release/lib/git')

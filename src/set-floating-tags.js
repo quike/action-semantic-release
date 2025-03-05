@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { tag } from 'semantic-release/lib/git'
+import { tag } from 'semantic-release/lib/git.js'
 
 export const setFloatingTags = async (release, { cwd = process.cwd(), env = process.env }) => {
   if (release) {
