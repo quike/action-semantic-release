@@ -71,6 +71,7 @@ jobs:
 | **dry-run**                | `false`   | Dry Run execution                                                                          |
 | **default-config-enabled** | `true`    | Force default config if not present                                                        |
 | **default-preset-info**    | `true`    | Sets prefixed release rules and preset configs as callback if default info does not exists |
+| **floating-tags**          | `false`   | Create floating tags from major and minor versions after release.                          |
 
 #### Environment Variables
 
