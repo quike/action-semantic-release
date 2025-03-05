@@ -52,7 +52,7 @@ jobs:
           debug-mode: true
           dry-run: false
           add-summary: true
-          default-config-enabled: true
+          default-config: true
           default-preset-info: true
           floating-tags: false
         env:
@@ -66,14 +66,14 @@ jobs:
 
 #### Action Variables
 
-| _Variable_                 | _Default_ | _Details_                                                                                  |
-| -------------------------- | --------- | ------------------------------------------------------------------------------------------ |
-| **add-summary**            | `true`    | Add a GitHub Job Summary with release details                                              |
-| **debug-mode**             | `false`   | To enable verbosity                                                                        |
-| **dry-run**                | `false`   | Dry Run execution                                                                          |
-| **default-config-enabled** | `true`    | Force default config if not present                                                        |
-| **default-preset-info**    | `true`    | Sets prefixed release rules and preset configs as callback if default info does not exists |
-| **floating-tags**          | `false`   | Create floating tags from major and minor versions after release.                          |
+| _Variable_                | _Default_ | _Details_                                                                                  |
+| ------------------------- | --------- | ------------------------------------------------------------------------------------------ |
+| **add-summary**           | `true`    | Add a GitHub Job Summary with release details                                              |
+| **debug-mode**            | `false`   | To enable verbosity                                                                        |
+| **dry-run**               | `false`   | Dry Run execution                                                                          |
+| **default-config** | `true`    | Force default config if not present                                                        |
+| **default-preset-info**   | `true`    | Sets prefixed release rules and preset configs as callback if default info does not exists |
+| **floating-tags**         | `false`   | Create floating tags from major and minor versions after release.                          |
 
 #### Environment Variables
 

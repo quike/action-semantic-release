@@ -23,7 +23,7 @@ describe('getConfig', () => {
     vi.clearAllMocks()
   })
 
-  it('should return the default config if default-config-enabled is true and no config found', async () => {
+  it('should return the default config if default-config is true and no config found', async () => {
     core.getBooleanInput.mockReturnValueOnce(true)
     cosmiconfig.mockReturnValueOnce({
       search: vi.fn().mockResolvedValueOnce(null)
@@ -34,7 +34,7 @@ describe('getConfig', () => {
     expect(config).toEqual({ default: 'config' })
   })
 
-  it('should return the found config if default-config-enabled is false', async () => {
+  it('should return the found config if default-config is false', async () => {
     core.getBooleanInput.mockReturnValueOnce(false)
     cosmiconfig.mockReturnValueOnce({
       search: vi.fn().mockResolvedValueOnce({ config: { found: 'config' } })
@@ -44,7 +44,7 @@ describe('getConfig', () => {
     expect(config).toEqual({ found: 'config' })
   })
 
-  it('should return the found config if default-config-enabled is not set', async () => {
+  it('should return the found config if default-config is not set', async () => {
     core.getBooleanInput.mockReturnValueOnce('')
     cosmiconfig.mockReturnValueOnce({
       search: vi.fn().mockResolvedValueOnce({ config: { found: 'config' } })
@@ -54,7 +54,7 @@ describe('getConfig', () => {
     expect(config).toEqual({ found: 'config' })
   })
 
-  it('should return the default config if default-config-enabled is true and config is not found', async () => {
+  it('should return the default config if default-config is true and config is not found', async () => {
     core.getBooleanInput.mockReturnValueOnce(true)
     cosmiconfig.mockReturnValueOnce({
       search: vi.fn().mockResolvedValueOnce(null)
@@ -65,7 +65,7 @@ describe('getConfig', () => {
     expect(config).toEqual({ default: 'config' })
   })
 
-  it('should return the found config if default-config-enabled is true and config is found', async () => {
+  it('should return the found config if default-config is true and config is found', async () => {
     core.getBooleanInput.mockReturnValueOnce(true)
     cosmiconfig.mockReturnValueOnce({
       search: vi.fn().mockResolvedValueOnce({ config: { found: 'config' } })
