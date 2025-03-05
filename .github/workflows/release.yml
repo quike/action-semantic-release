@@ -52,9 +52,16 @@ jobs:
           debug-mode: true
           dry-run: false
           default-config-enabled: true
+          floating-tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GHTOKEN }}
       - name: Get the output
         run: |
-          echo "The release version is ${{ steps.release.outputs.release-version }}"
-          echo "The relese sha is ${{ steps.release.outputs.release-git-head }}"
+          echo "release-published: ${{ steps.release.outputs.release-published }}"
+          echo "release-git-head: ${{ steps.release.outputs.release-version }}"
+          echo "release-major: ${{ steps.release.outputs.release-major }}"
+          echo "release-minor: ${{ steps.release.outputs.release-minor }}"
+          echo "release-patch: ${{ steps.release.outputs.release-patch }}"
+          echo "release-type: ${{ steps.release.outputs.release-type }}"
+          echo "release-git-head: ${{ steps.release.outputs.release-git-head }}"
+          echo "release-git-tag: ${{ steps.release.outputs.release-git-tag }}"
