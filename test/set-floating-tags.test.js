@@ -33,8 +33,8 @@ describe('setSummary', () => {
 
     const result = await setFloatingTags(release, {})
 
-    expect(core.info).toHaveBeenCalledWith('Setting floating major tag: v1')
-    expect(core.info).toHaveBeenCalledWith('Setting floating minor tag: v1.0')
+    expect(core.info).toHaveBeenCalledWith('Creating tag: v1')
+    expect(core.info).toHaveBeenCalledWith('Creating tag: v1.0')
     expect(tag).toHaveBeenCalledWith('v1', '-d', { cwd: process.cwd(), env: process.env })
     expect(tag).toHaveBeenCalledWith('v1', 'abc123', { cwd: process.cwd(), env: process.env })
     expect(tag).toHaveBeenCalledWith('v1.0', '-d', { cwd: process.cwd(), env: process.env })

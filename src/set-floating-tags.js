@@ -17,19 +17,53 @@ export const setFloatingTags = async (release, { cwd = process.cwd(), env = proc
       const majorTag = `v${release?.new?.major}`
       const minorTag = `v${release?.new?.major}.${release?.new?.minor}`
       const gitHead = release?.new?.gitHead
-      core.info(`Setting floating major tag: ${majorTag}`)
-      await tag(majorTag, '-d', { cwd, env })
-      await execa('git', ['push', 'origin', '--delete', majorTag], { cwd, env })
-      await tag(majorTag, gitHead, { cwd, env })
-      core.info(`Setting floating minor tag: ${minorTag}`)
-      await tag(minorTag, '-d', { cwd, env })
-      await execa('git', ['push', 'origin', '--delete', minorTag], { cwd, env })
-      await tag(minorTag, gitHead, { cwd, env })
-      await execa('git', ['push', 'origin', majorTag, minorTag], { cwd, env })
+      await deleteTag(majorTag, { cwd, env })
+      await createTag(majorTag, gitHead, { cwd, env })
+      await deleteTag(minorTag, { cwd, env })
+      await createTag(minorTag, gitHead, { cwd, env })
       return { majorTag, minorTag }
     }
   } else {
     core.debug('Floating tags cannot be set.')
   }
   return {}
+}
+
+/**
+ * Deletes a Git tag both locally and remotely.
+ *
+ * @param {string} myTag - The name of the tag to delete.
+ * @param {Object} options - Options for deleting the tag.
+ * @param {string} [options.cwd=process.cwd()] - The current working directory.
+ * @param {Object} [options.env=process.env] - The environment variables.
+ * @returns {Promise<void>} Resolves when the tag has been deleted.
+ */
+const deleteTag = async (myTag, options) => {
+  core.info(`Deleting tag: ${myTag}`)
+  try {
+    await tag(myTag, '-d', options)
+    await execa('git', ['push', 'origin', '--delete', myTag], options)
+  } catch (error) {
+    core.error(`Unable to delete tag. Error: ${error}`)
+  }
+}
+
+/**
+ * Creates a Git tag both locally and remotely.
+ *
+ * @param {string} myTag - The name of the tag to create.
+ * @param {string} gitHead - The Git commit SHA to tag.
+ * @param {Object} options - Options for creating the tag.
+ * @param {string} [options.cwd=process.cwd()] - The current working directory.
+ * @param {Object} [options.env=process.env] - The environment variables.
+ * @returns {Promise<void>} Resolves when the tag has been created.
+ */
+const createTag = async (myTag, gitHead, options) => {
+  core.info(`Creating tag: ${myTag}`)
+  try {
+    await tag(myTag, gitHead, options)
+    await execa('git', ['push', 'origin', myTag], options)
+  } catch (error) {
+    core.error(`Unable to create tag. Error: ${error}`)
+  }
 }
