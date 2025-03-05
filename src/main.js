@@ -31,7 +31,7 @@ export async function run() {
         core.error(`Error verifying release: ${release}`)
       }
       let dryRunInput = getBooleanInput('dry-run', { required: false, default: true })
-      if (dryRunInput) {
+      if (!dryRunInput) {
         let floatingTagsInput = getBooleanInput('floating-tags', { required: false, default: false })
         if (floatingTagsInput) {
           await setFloatingTags(release, { cwd: workDir, env: process.env })
