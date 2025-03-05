@@ -1,5 +1,4 @@
 import * as core from '@actions/core'
-import { tag } from 'semantic-release/lib/git.js'
 import { execa } from 'execa'
 
 /**
@@ -41,7 +40,7 @@ export const setFloatingTags = async (release, { cwd = process.cwd(), env = proc
 const deleteTag = async (myTag, options) => {
   core.info(`Deleting tag: ${myTag}`)
   try {
-    await tag(myTag, '-d', options)
+    await execa('git', ['tag', myTag, '-d'], options)
     await execa('git', ['push', 'origin', '--delete', myTag], options)
   } catch (error) {
     core.error(`Unable to delete tag. Error: ${error}`)
@@ -61,7 +60,7 @@ const deleteTag = async (myTag, options) => {
 const createTag = async (myTag, gitHead, options) => {
   core.info(`Creating tag: ${myTag}`)
   try {
-    await tag(myTag, gitHead, options)
+    await execa('git', ['tag', myTag, gitHead], options)
     await execa('git', ['push', 'origin', myTag], options)
   } catch (error) {
     core.error(`Unable to create tag. Error: ${error}`)
