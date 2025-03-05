@@ -21,6 +21,12 @@ const presetConfigConventionalCommits = {
 
 export const defaultPresetConfigs = new Map([['conventionalcommits', presetConfigConventionalCommits]])
 
+/**
+ * Retrieves the preset configuration for the specified preset.
+ *
+ * @param {string} preset - The preset name.
+ * @returns {Object} The preset configuration.
+ */
 export function getPresetConfig(preset = 'conventionalcommits') {
   return defaultPresetConfigs.get(preset) ?? null
 }

@@ -1,6 +1,8 @@
 import * as core from '@actions/core'
 import { getPresetConfig } from './default-preset-config.js'
 import { getReleaseRules } from './default-release-rules.js'
+import { getBooleanInput } from './utils.js'
+import { INPUTS } from './constants.js'
 
 const PLUGIN_CONFIG = {
   '@semantic-release/commit-analyzer': ['presetConfig', 'releaseRules'],
@@ -21,10 +23,7 @@ export const getPlugins = async (config) => {
 
   let plugins = config.plugins || []
 
-  let defaultPresetInfoInput = core.getBooleanInput('default-preset-info', { required: false })
-  core.info(`set-default-preset-info: ${defaultPresetInfoInput}`)
-  defaultPresetInfoInput = defaultPresetInfoInput !== '' ? defaultPresetInfoInput === true : ''
-
+  let defaultPresetInfoInput = getBooleanInput(INPUTS.DEFAULT_PRESET_INFO)
   if (defaultPresetInfoInput) {
     return plugins.map((plugin) => {
       if (

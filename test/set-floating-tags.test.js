@@ -5,6 +5,7 @@ import { tag } from 'semantic-release/lib/git.js'
 
 vi.mock('@actions/core')
 vi.mock('semantic-release/lib/git')
+vi.mock('execa')
 
 describe('setSummary', () => {
   beforeEach(() => {

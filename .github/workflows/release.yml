@@ -51,8 +51,9 @@ jobs:
         with:
           debug-mode: true
           dry-run: false
-          default-config-enabled: true
+          default-config: true
           floating-tags: true
+          add-summary: true
         env:
           GITHUB_TOKEN: ${{ secrets.GHTOKEN }}
       - name: Get the output

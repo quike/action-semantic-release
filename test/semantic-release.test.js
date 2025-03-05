@@ -51,7 +51,7 @@ describe('runSemanticRelease', () => {
     await runSemanticRelease(options, workdir)
 
     expect(core.debug).toHaveBeenCalledWith('No release published')
-    expect(core.exportVariable).toHaveBeenCalledWith('NEW_RELEASE_PUBLISHED', 'false')
-    expect(core.setOutput).toHaveBeenCalledWith('new-release-published', 'false')
+    expect(core.exportVariable).toHaveBeenCalledWith('RELEASE_PUBLISHED', 'false')
+    expect(core.setOutput).toHaveBeenCalledWith('release-published', 'false')
   })
 })

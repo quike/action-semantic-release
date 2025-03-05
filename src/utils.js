@@ -46,14 +46,28 @@ export const cleanObject = (obj) => {
   return obj
 }
 
-export const getBooleanInput = (name, options) => {
-  const input = core.getBooleanInput(name, options)
+/**
+ * Retrieves a boolean input value from the GitHub Actions input.
+ *
+ * @param {*} config - The name of the input to retrieve.
+ * @returns {boolean} - The boolean value of the input.
+ */
+export const getBooleanInput = (config) => {
+  const { name, required, default: defaultValue } = config
+  const input = core.getBooleanInput(name, { required })
   core.info(`${name}: ${input}`)
-  return input !== undefined ? input : options.default
+  return input !== undefined ? input : defaultValue
 }
 
-export const getInput = (name, options) => {
-  const input = core.getInput(name, options)
+/**
+ * Retrieves an input value from the GitHub Actions input.
+ *
+ * @param {*} config - The name of the input to retrieve.
+ * @returns {*} - The value of the input, or the default value if the input is not provided.
+ */
+export const getInput = (config) => {
+  const { name, required, default: defaultValue } = config
+  const input = core.getInput(name, { required })
   core.info(`${name}: ${input}`)
-  return input !== undefined && input !== '' ? input : options.default
+  return input !== undefined && input !== '' ? input : defaultValue
 }

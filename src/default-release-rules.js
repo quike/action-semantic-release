@@ -21,6 +21,12 @@ const releaseRulesConventionalCommits = [
 
 export const defaultReleaseRules = new Map([['conventionalcommits', releaseRulesConventionalCommits]])
 
+/**
+ * Retrieves the release rules configuration for the specified preset.
+ *
+ * @param {string} preset - The preset name.
+ * @returns {Object} The release rules configuration.
+ */
 export function getReleaseRules(preset = 'conventionalcommits') {
   return defaultReleaseRules.get(preset) ?? null
 }
