@@ -29,7 +29,6 @@ export async function run() {
     if (result) {
       const release = await verifyRelease(result)
       if (release) {
-        core.error(`Error verifying release: ${release}`)
         let dryRunInput = getBooleanInput(INPUTS.DRY_RUN)
         if (getBooleanInput(INPUTS.FLOATING_TAGS) && !dryRunInput) {
           await setFloatingTags(release, { cwd: workDir, env: process.env })
