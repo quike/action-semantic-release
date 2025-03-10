@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import * as core from '@actions/core'
 import { getOptions } from '../src/get-options.js'
+import { DEFAULT_USER } from '../src/constants.js'
 
 vi.mock('@actions/core')
 
@@ -26,7 +27,13 @@ describe('getOptions', () => {
       branches: ['master', 'main'],
       ci: true,
       debug: true,
-      dryRun: false
+      dryRun: false,
+      gitCredentials: {
+        GIT_AUTHOR_NAME: DEFAULT_USER.USER_NAME,
+        GIT_AUTHOR_EMAIL: DEFAULT_USER.USER_EMAIL,
+        GIT_COMMITTER_NAME: DEFAULT_USER.USER_NAME,
+        GIT_COMMITTER_EMAIL: DEFAULT_USER.USER_EMAIL
+      }
     }
     expect(result).toEqual(expected)
     expect(core.info).toHaveBeenCalledWith(`Options: ${JSON.stringify(expected)}`)
@@ -53,7 +60,13 @@ describe('getOptions', () => {
       ci: true,
       debug: false,
       dryRun: false,
-      tagFormat: `v\${version}`
+      tagFormat: `v\${version}`,
+      gitCredentials: {
+        GIT_AUTHOR_NAME: DEFAULT_USER.USER_NAME,
+        GIT_AUTHOR_EMAIL: DEFAULT_USER.USER_EMAIL,
+        GIT_COMMITTER_NAME: DEFAULT_USER.USER_NAME,
+        GIT_COMMITTER_EMAIL: DEFAULT_USER.USER_EMAIL
+      }
     }
     const result = await getOptions(config)
     const expected = config
@@ -119,7 +132,13 @@ describe('getOptions', () => {
       prepare: ['prepare1'],
       publish: ['publish1'],
       success: ['success1'],
-      fail: ['fail1']
+      fail: ['fail1'],
+      gitCredentials: {
+        GIT_AUTHOR_NAME: DEFAULT_USER.USER_NAME,
+        GIT_AUTHOR_EMAIL: DEFAULT_USER.USER_EMAIL,
+        GIT_COMMITTER_NAME: DEFAULT_USER.USER_NAME,
+        GIT_COMMITTER_EMAIL: DEFAULT_USER.USER_EMAIL
+      }
     }
     expect(result).toEqual(expected)
     expect(core.info).toHaveBeenCalledWith(`Options: ${JSON.stringify(expected)}`)
