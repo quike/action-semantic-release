@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import { execa } from 'execa'
-import { DEFAULT_USER } from './constants'
+import { DEFAULT_USER } from './constants.js'
 
 /**
  * Sets floating tags for the release.
