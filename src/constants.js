@@ -1,3 +1,11 @@
+const USER_NAME = 'github-actions[bot]'
+const USER_EMAIL = 'github-actions[bot]@users.noreply.github.com'
+
+export const DEFAULT_USER = {
+  USER_NAME,
+  USER_EMAIL
+}
+
 const DRY_RUN = { name: 'dry-run', required: false, default: false }
 const DEBUG_MODE = { name: 'debug-mode', required: false, default: true }
 const CI = { name: 'ci', required: false, default: true }

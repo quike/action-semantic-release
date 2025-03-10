@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import { cleanObject, getBooleanInput } from './utils.js'
 import { getPlugins } from './get-plugins.js'
-import { INPUTS } from './constants.js'
+import { DEFAULT_USER, INPUTS } from './constants.js'
 
 /**
  * Retrieves and processes configuration options for the semantic release action.
@@ -38,10 +38,10 @@ export const getOptions = async (config) => {
     success: config.success || [],
     fail: config.fail || [],
     gitCredentials: {
-      GIT_AUTHOR_NAME: process.env.GIT_AUTHOR_NAME || '',
-      GIT_AUTHOR_EMAIL: process.env.GIT_AUTHOR_EMAIL || '',
-      GIT_COMMITTER_NAME: process.env.GIT_COMMITTER_NAME || '',
-      GIT_COMMITTER_EMAIL: process.env.GIT_COMMITTER_EMAIL || ''
+      GIT_AUTHOR_NAME: process.env.GIT_AUTHOR_NAME || DEFAULT_USER.USER_NAME,
+      GIT_AUTHOR_EMAIL: process.env.GIT_AUTHOR_EMAIL || DEFAULT_USER.USER_EMAIL,
+      GIT_COMMITTER_NAME: process.env.GIT_COMMITTER_NAME || DEFAULT_USER.USER_NAME,
+      GIT_COMMITTER_EMAIL: process.env.GIT_COMMITTER_EMAIL || DEFAULT_USER.USER_EMAIL
     }
   }
 
