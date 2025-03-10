@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import { execa } from 'execa'
+import { DEFAULT_USER } from './constants.js'
 
 /**
  * Sets floating tags for the release.
@@ -16,6 +17,7 @@ export const setFloatingTags = async (release, { cwd = process.cwd(), env = proc
       const majorTag = `v${release?.new?.major}`
       const minorTag = `v${release?.new?.major}.${release?.new?.minor}`
       const gitHead = release?.new?.gitHead
+      await setUp({ cwd, env })
       await deleteTag(majorTag, { cwd, env })
       await createTag(majorTag, gitHead, { cwd, env })
       await deleteTag(minorTag, { cwd, env })
@@ -64,5 +66,23 @@ const createTag = async (myTag, gitHead, options) => {
     await execa('git', ['push', 'origin', myTag], options)
   } catch (error) {
     core.error(`Unable to create tag. Error: ${error}`)
+  }
+}
+
+/**
+ * Config version control details.
+ *
+ * @param {Object} options - Options for creating the tag.
+ * @param {string} [options.cwd=process.cwd()] - The current working directory.
+ * @param {Object} [options.env=process.env] - The environment variables.
+ * @returns {Promise<void>} Resolves when setup is completed.
+ */
+const setUp = async (options) => {
+  core.info(`Setting up env pre tagging with user: ${DEFAULT_USER.USER_NAME}`)
+  try {
+    await execa('git', ['config', 'user.name', DEFAULT_USER.USER_NAME], options)
+    await execa('git', ['config', 'user.email', DEFAULT_USER.USER_EMAIL], options)
+  } catch (error) {
+    core.error(`Unable to set up. Error: ${error}`)
   }
 }
