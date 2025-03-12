@@ -13,7 +13,7 @@ const presetConfigConventionalCommits = {
     { type: 'docs', section: 'Documentation', hidden: true },
     { type: 'test', section: 'Tests', hidden: true },
     { type: 'ci', section: 'Continuous Integration', hidden: true },
-    { type: 'chore', section: 'Chores', hidden: true },
+    { type: 'chore', section: 'Chores' },
     { type: 'style', section: 'Styles', hidden: true },
     { type: 'build', section: 'Build System', hidden: true }
   ]
