@@ -1,4 +1,4 @@
-name: 'semantic-release'
+name: 'action-semver'
 description: 'Github action to release projects using semantic-release'
 author: 'quike'
 
