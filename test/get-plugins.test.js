@@ -1,7 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { getPlugins } from '../src/get-plugins.js'
-import { getPresetConfig } from '../src/default-preset-config.js'
-import { getReleaseRules } from '../src/default-release-rules.js'
 import * as core from '@actions/core'
 
 vi.mock('@actions/core', async () => {

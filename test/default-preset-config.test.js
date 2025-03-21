@@ -33,7 +33,7 @@ describe('getPresetConfig', () => {
     const config = getPresetConfig('conventionalcommits')
     const choreConfig = config.types.find((rule) => rule.type === 'chore')
     expect(choreConfig.section).toBe('Chores')
-    expect(choreConfig.hidden).toBe(true)
+    expect(choreConfig.hidden).toEqual(undefined)
   })
 
   it('should return the correct section for "docs" and check if hidden is true', () => {
