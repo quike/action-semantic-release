@@ -1,9 +1,9 @@
-name: 'action-semantic-release'
+name: 'action-semver'
 description: 'Github action to release projects using semantic-release'
 author: 'quike'
 
 branding:
-  icon: activity
+  icon: share-2
   color: yellow
 
 inputs:
