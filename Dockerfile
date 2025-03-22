@@ -6,7 +6,7 @@ RUN apt-get update \
 
 LABEL name="quike/semantic-release"
 LABEL maintainer="quike"
-LABEL email="quike.mora@gmail.com"
+LABEL email="616137+quike@users.noreply.github.com"
 LABEL description="Fully automated version management and package publishing. A docker wrapping over github/semantic-release"
 
 ENV DRY_RUN=false
