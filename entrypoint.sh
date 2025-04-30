@@ -70,17 +70,17 @@ export_metadata() {
   INPUT_FILE="$GITHUB_ENV"
   OUTPUT_FILE="$WORKING_PATH/metadata.env"
   if [ -f "$INPUT_FILE" ] && [ -n "$EXPORT_METADATA" ] && [ "$EXPORT_METADATA" = true ]; then
-    true > "$OUTPUT_FILE"
+    true >"$OUTPUT_FILE"
 
     while IFS= read -r line; do
       if [[ "$line" == *"<<ghadelimiter_"* ]]; then
-        key="${line%%<<*}"  # Get part before << delimiter
+        key="${line%%<<*}" # Get part before << delimiter
         # Read value and delimiter end line
         IFS= read -r value
         IFS= read -r _end_delim
-        echo "$key=$value" >> "$OUTPUT_FILE"
+        echo "$key=$value" >>"$OUTPUT_FILE"
       fi
-    done < "$INPUT_FILE"
+    done <"$INPUT_FILE"
     if [ -f "$OUTPUT_FILE" ]; then
       print "Metadata file created successfully: $OUTPUT_FILE"
     else
