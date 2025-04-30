@@ -54,7 +54,7 @@ export const cleanObject = (obj) => {
  */
 export const getBooleanInput = (config) => {
   const { name, required, default: defaultValue } = config
-  const input = core.getBooleanInput(name, { required })
+  const input = core.getBooleanInput(isGitLabCi() ? transformKey(name) : name, { required })
   core.info(`${name}: ${input}`)
   return input !== undefined ? input : defaultValue
 }
@@ -67,7 +67,22 @@ export const getBooleanInput = (config) => {
  */
 export const getInput = (config) => {
   const { name, required, default: defaultValue } = config
-  const input = core.getInput(name, { required })
+  const input = core.getInput(isGitLabCi() ? transformKey(name) : name, { required })
   core.info(`${name}: ${input}`)
   return input !== undefined && input !== '' ? input : defaultValue
+}
+
+export const isGitLabCi = () => {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env.CI === 'true' && process.env.GITLAB_CI === 'true'
+  } else {
+    return false
+  }
+}
+
+export const transformKey = (key) => {
+  if (typeof key !== 'string') {
+    return key
+  }
+  return key.replace(/[- ]/g, '_').toUpperCase()
 }
