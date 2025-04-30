@@ -90,6 +90,9 @@ export_metadata() {
         IFS= read -r value
         IFS= read -r _end_delim
         echo "$key=$value" >>"$OUTPUT_FILE"
+      elif [[ "$line" == *=* ]]; then
+        # Fallback to standard key=value lines (e.g., git-head=e202b531...)
+        echo "$line" >>"$OUTPUT_FILE"
       fi
     done <"$INPUT_FILE"
     if [ -f "$OUTPUT_FILE" ]; then
