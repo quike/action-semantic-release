@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { parseInput, cleanObject, getBooleanInput, getInput } from '../src/utils.js'
+import { parseInput, cleanObject, getBooleanInput, getInput, isGitLabCi, transformKey } from '../src/utils.js'
 import * as core from '@actions/core'
 import { INPUTS } from '../src/constants.js'
 
@@ -144,6 +144,18 @@ describe('getBooleanInput', () => {
     expect(core.info).toHaveBeenCalledWith('dry-run: undefined')
     expect(result).toBe(false)
   })
+
+  it('should return the boolean value when input is provided and CI is GitLab', () => {
+    process.env.CI = 'true'
+    process.env.GITLAB_CI = 'true'
+    core.getBooleanInput.mockReturnValue(true)
+
+    const result = getBooleanInput(INPUTS.DEBUG_MODE)
+
+    expect(core.getBooleanInput).toHaveBeenCalledWith('DEBUG_MODE', { required: false })
+    expect(core.info).toHaveBeenCalledWith('debug-mode: true')
+    expect(result).toBe(true)
+  })
 })
 
 describe('getInput', () => {
@@ -179,5 +191,101 @@ describe('getInput', () => {
     expect(core.getInput).toHaveBeenCalledWith('debug-mode', { required: false })
     expect(core.info).toHaveBeenCalledWith('debug-mode: ')
     expect(result).toBe(true)
+  })
+
+  it('should return the value when input is provided and CI is GitLab', () => {
+    process.env.CI = 'true'
+    process.env.GITLAB_CI = 'true'
+    core.getInput.mockReturnValue('whatever')
+
+    const result = getInput(INPUTS.WORKING_PATH)
+
+    expect(core.getInput).toHaveBeenCalledWith('WORKING_PATH', { required: false })
+    expect(core.info).toHaveBeenCalledWith('working-path: whatever')
+    expect(result).toBe('whatever')
+  })
+})
+
+describe('transformKey', () => {
+  it('should replace hyphens with underscores and convert to uppercase', () => {
+    const input = 'one-potato'
+    const result = transformKey(input)
+    expect(result).toBe('ONE_POTATO')
+  })
+
+  it('should replace spaces with underscores and convert to uppercase', () => {
+    const input = 'one potato'
+    const result = transformKey(input)
+    expect(result).toBe('ONE_POTATO')
+  })
+
+  it('should handle single word inputs correctly', () => {
+    const input = 'potato'
+    const result = transformKey(input)
+    expect(result).toBe('POTATO')
+  })
+
+  it('should return the key unchanged if it is not a string', () => {
+    const input = 123
+    const result = transformKey(input)
+    expect(result).toBe(123)
+  })
+
+  it('should return the key unchanged if the input is undefined', () => {
+    const input = undefined
+    const result = transformKey(input)
+    expect(result).toBe(undefined)
+  })
+})
+
+describe('isGitLabCi', () => {
+  beforeEach(() => {
+    if (!process.env) {
+      process.env = {} // Mock process.env if it doesn't exist
+    }
+  })
+
+  afterEach(() => {
+    delete process.env.CI
+    delete process.env.GITLAB_CI
+  })
+
+  it('should return true when CI and GITLAB_CI environment variables are set to "true"', () => {
+    process.env.CI = 'true'
+    process.env.GITLAB_CI = 'true'
+
+    const result = isGitLabCi()
+    expect(result).toBe(true)
+  })
+
+  it('should return false when CI is not set to "true"', () => {
+    process.env.CI = 'false'
+    process.env.GITLAB_CI = 'true'
+
+    const result = isGitLabCi()
+    expect(result).toBe(false)
+  })
+
+  it('should return false when GITLAB_CI is not set to "true"', () => {
+    process.env.CI = 'true'
+    process.env.GITLAB_CI = 'false'
+
+    const result = isGitLabCi()
+    expect(result).toBe(false)
+  })
+
+  it('should return false when neither CI nor GITLAB_CI are set', () => {
+    const result = isGitLabCi()
+    expect(result).toBe(false)
+  })
+
+  it('should return false when process.env is undefined', () => {
+    const originalProcessEnv = process.env
+    process.env = undefined
+
+    const result = isGitLabCi()
+    expect(result).toBe(false)
+
+    process.env = originalProcessEnv // Restore process.env
   })
 })
