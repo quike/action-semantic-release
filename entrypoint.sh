@@ -99,4 +99,4 @@ main() {
   export_metadata "$@"
 }
 
-export_metadata "$@"
+main "$@"
