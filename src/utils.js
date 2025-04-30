@@ -72,6 +72,11 @@ export const getInput = (config) => {
   return input !== undefined && input !== '' ? input : defaultValue
 }
 
+/**
+ * Determines if the current environment is a GitLab CI environment.
+ *
+ * @returns {boolean} - Returns `true` if the environment variables indicate a GitLab CI environment, otherwise `false`.
+ */
 export const isGitLabCi = () => {
   if (typeof process !== 'undefined' && process.env) {
     return process.env.CI === 'true' && process.env.GITLAB_CI === 'true'
@@ -80,6 +85,13 @@ export const isGitLabCi = () => {
   }
 }
 
+/**
+ * Transforms a string key into an uppercase, underscore-separated format.
+ * This is useful for converting keys to a format compatible with environment variables.
+ *
+ * @param {string} key - The key to transform.
+ * @returns {string} - The transformed key in uppercase with spaces and hyphens replaced by underscores.
+ */
 export const transformKey = (key) => {
   if (typeof key !== 'string') {
     return key
