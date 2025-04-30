@@ -54,7 +54,7 @@ export const cleanObject = (obj) => {
  */
 export const getBooleanInput = (config) => {
   const { name, required, default: defaultValue } = config
-  const input = core.getBooleanInput(name, { required })
+  const input = core.getBooleanInput(isGitLabCi() ? transformKey(name) : name, { required })
   core.info(`${name}: ${input}`)
   return input !== undefined ? input : defaultValue
 }
@@ -67,7 +67,34 @@ export const getBooleanInput = (config) => {
  */
 export const getInput = (config) => {
   const { name, required, default: defaultValue } = config
-  const input = core.getInput(name, { required })
+  const input = core.getInput(isGitLabCi() ? transformKey(name) : name, { required })
   core.info(`${name}: ${input}`)
   return input !== undefined && input !== '' ? input : defaultValue
+}
+
+/**
+ * Determines if the current environment is a GitLab CI environment.
+ *
+ * @returns {boolean} - Returns `true` if the environment variables indicate a GitLab CI environment, otherwise `false`.
+ */
+export const isGitLabCi = () => {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env.CI === 'true' && process.env.GITLAB_CI === 'true'
+  } else {
+    return false
+  }
+}
+
+/**
+ * Transforms a string key into an uppercase, underscore-separated format.
+ * This is useful for converting keys to a format compatible with environment variables.
+ *
+ * @param {string} key - The key to transform.
+ * @returns {string} - The transformed key in uppercase with spaces and hyphens replaced by underscores.
+ */
+export const transformKey = (key) => {
+  if (typeof key !== 'string') {
+    return key
+  }
+  return key.replace(/[- ]/g, '_').toUpperCase()
 }
