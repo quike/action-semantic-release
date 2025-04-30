@@ -52,17 +52,28 @@ run() {
 
 validate() {
   CURRENT_SHA=$(git rev-parse HEAD)
-  echo "git-head=${CURRENT_SHA}" >>"$GITHUB_OUTPUT"
-  echo "git-head=${CURRENT_SHA}" >>"$GITHUB_ENV"
+  echo "GIT_HEAD=${CURRENT_SHA}" >>"$GITHUB_OUTPUT"
+  echo "GIT_HEAD=${CURRENT_SHA}" >>"$GITHUB_ENV"
   if [ -n "$EVENT_NAME" ] && [ "$EVENT_NAME" == "pull_request" ]; then
     print "Type of event: $EVENT_NAME"
-    ORIGINAL_SHA=$(jq -r '.pull_request.head.sha' "$GITHUB_EVENT_PATH")
+    if [ -f "$GITHUB_EVENT_PATH" ]; then
+      ORIGINAL_SHA=$(jq -r '.pull_request.head.sha' "$GITHUB_EVENT_PATH")
+    else
+      print "Error: GITHUB_EVENT_PATH is not set or file does not exist."
+      if [ -n "$CI_COMMIT_SHA" ]; then
+        print "Falling back to CI_COMMIT_SHA as original SHA."
+        ORIGINAL_SHA="$CI_COMMIT_SHA"
+      else
+        print "Falling back to current HEAD as original SHA."
+        ORIGINAL_SHA="$CURRENT_SHA"
+      fi
+    fi
     print "Original Pull Request Commit ID: $ORIGINAL_SHA"
     print "HEAD is now at ${CURRENT_SHA} after Pull Request Commit Id merge with HEAD."
     PULL_REQUEST_VERSION=${ORIGINAL_SHA:0:7}
     print "Short SHA=${PULL_REQUEST_VERSION}"
-    echo "release-version=${PULL_REQUEST_VERSION}" >>"$GITHUB_OUTPUT"
-    echo "release-version=${PULL_REQUEST_VERSION}" >>"$GITHUB_ENV"
+    echo "RELEASE_VERSION=${PULL_REQUEST_VERSION}" >>"$GITHUB_OUTPUT"
+    echo "RELEASE_VERSION=${PULL_REQUEST_VERSION}" >>"$GITHUB_ENV"
   fi
 }
 
