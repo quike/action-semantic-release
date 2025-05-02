@@ -67,7 +67,8 @@ export const getBooleanInput = (config) => {
  */
 export const getInput = (config) => {
   const { name, required, default: defaultValue } = config
-  const input = core.getInput(isGitLabCi() ? transformKey(name) : name, { required })
+  const finalName = isGitLabCi() ? transformKey(name) : name
+  const input = core.getInput(finalName, { required })
   core.info(`${name}: ${input}`)
   return input !== undefined && input !== '' ? input : defaultValue
 }
@@ -97,4 +98,15 @@ export const transformKey = (key) => {
     return key
   }
   return key.replace(/[- ]/g, '_').toUpperCase()
+}
+
+/**
+ * Retrieves a var from the environment or defaults.
+ *
+ * @param {string} envVar - The environment variable to check.
+ * @param {string} defaultValue - The default value to return if the environment variable is not set.
+ * @returns {string} The var value.
+ */
+export const getEnvVar = (envVar, defaultValue) => {
+  return process.env[envVar] || defaultValue
 }

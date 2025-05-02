@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import { execa } from 'execa'
 import { DEFAULT_USER } from './constants.js'
+import { getEnvVar } from './utils.js'
 
 /**
  * Sets floating tags for the release.
@@ -78,10 +79,12 @@ const createTag = async (myTag, gitHead, options) => {
  * @returns {Promise<void>} Resolves when setup is completed.
  */
 const setUp = async (options) => {
+  const userName = getEnvVar('GIT_COMMITTER_NAME', DEFAULT_USER.USER_NAME)
+  const userEmail = getEnvVar('GIT_COMMITTER_EMAIL', DEFAULT_USER.USER_EMAIL)
   core.info(`Setting up env pre tagging with user: ${DEFAULT_USER.USER_NAME}`)
   try {
-    await execa('git', ['config', 'user.name', DEFAULT_USER.USER_NAME], options)
-    await execa('git', ['config', 'user.email', DEFAULT_USER.USER_EMAIL], options)
+    await execa('git', ['config', 'user.name', userName], options)
+    await execa('git', ['config', 'user.email', userEmail], options)
   } catch (error) {
     core.error(`Unable to set up. Error: ${error}`)
   }
