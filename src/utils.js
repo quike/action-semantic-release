@@ -67,8 +67,7 @@ export const getBooleanInput = (config) => {
  */
 export const getInput = (config) => {
   const { name, required, default: defaultValue } = config
-  const finalName = isGitLabCi() ? transformKey(name) : name
-  const input = core.getInput(finalName, { required })
+  const input = core.getInput(isGitLabCi() ? transformKey(name) : name, { required })
   core.info(`${name}: ${input}`)
   return input !== undefined && input !== '' ? input : defaultValue
 }
