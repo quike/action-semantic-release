@@ -192,7 +192,7 @@ describe('getInput', () => {
 
     const result = getInput(INPUTS.WORKING_PATH)
 
-    // expect(core.getInput).toHaveBeenCalledWith('working-path', { required: false })
+    expect(core.getInput).toHaveBeenCalledWith('working-path', { required: false })
     expect(core.info).toHaveBeenCalledWith('working-path: undefined')
     expect(result).toBe('{}')
   })
@@ -202,7 +202,7 @@ describe('getInput', () => {
 
     const result = getInput(INPUTS.WORKING_PATH)
 
-    // expect(core.getInput).toHaveBeenCalledWith('working-path', { required: false })
+    expect(core.getInput).toHaveBeenCalledWith('working-path', { required: false })
     expect(core.info).toHaveBeenCalledWith('working-path: ')
     expect(result).toBe('{}')
   })
