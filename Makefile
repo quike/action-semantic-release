@@ -28,3 +28,12 @@ docker-build:
 docker-run:
 	docker run --rm -it -v $(PWD):/github/workspace -e GH_TOKEN=$GH_TOKEN -d $(OWNER)/$(COMPONENT):$(VERSION)
 
+.PHONY: test
+test:
+	@echo "Run tests"
+	npm run coverage
+
+.PHONY: lint
+lint:
+	@echo "Run linter"
+	npm run format:write

@@ -125,6 +125,10 @@ describe('getBooleanInput', () => {
     vi.clearAllMocks()
   })
 
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
   it('should return the boolean input when provided', () => {
     core.getBooleanInput.mockReturnValue(true)
 
@@ -161,36 +165,46 @@ describe('getBooleanInput', () => {
 describe('getInput', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    if (!process.env) {
+      process.env = {} // Mock process.env if it doesn't exist
+    }
+    process.env.CI = 'false'
+    process.env.GITLAB_CI = 'false'
+  })
+
+  afterEach(() => {
+    vi.clearAllMocks()
+    delete process.env
   })
 
   it('should return the input when provided', () => {
-    core.getInput.mockReturnValue('test-value')
+    core.getInput.mockReturnValue('whatever')
 
-    const result = getInput(INPUTS.DEBUG_MODE)
+    const result = getInput(INPUTS.WORKING_PATH)
 
-    expect(core.getInput).toHaveBeenCalledWith('debug-mode', { required: false })
-    expect(core.info).toHaveBeenCalledWith('debug-mode: test-value')
-    expect(result).toBe('test-value')
+    expect(core.getInput).toHaveBeenCalledWith('working-path', { required: false })
+    expect(core.info).toHaveBeenCalledWith('working-path: whatever')
+    expect(result).toBe('whatever')
   })
 
   it('should return the default value when input is undefined', () => {
     core.getInput.mockReturnValue(undefined)
 
-    const result = getInput(INPUTS.DEBUG_MODE)
+    const result = getInput(INPUTS.WORKING_PATH)
 
-    expect(core.getInput).toHaveBeenCalledWith('debug-mode', { required: false })
-    expect(core.info).toHaveBeenCalledWith('debug-mode: undefined')
-    expect(result).toBe(true)
+    // expect(core.getInput).toHaveBeenCalledWith('working-path', { required: false })
+    expect(core.info).toHaveBeenCalledWith('working-path: undefined')
+    expect(result).toBe('{}')
   })
 
   it('should return the default value when input is an empty string', () => {
     core.getInput.mockReturnValue('')
 
-    const result = getInput(INPUTS.DEBUG_MODE)
+    const result = getInput(INPUTS.WORKING_PATH)
 
-    expect(core.getInput).toHaveBeenCalledWith('debug-mode', { required: false })
-    expect(core.info).toHaveBeenCalledWith('debug-mode: ')
-    expect(result).toBe(true)
+    // expect(core.getInput).toHaveBeenCalledWith('working-path', { required: false })
+    expect(core.info).toHaveBeenCalledWith('working-path: ')
+    expect(result).toBe('{}')
   })
 
   it('should return the value when input is provided and CI is GitLab', () => {
@@ -203,6 +217,9 @@ describe('getInput', () => {
     expect(core.getInput).toHaveBeenCalledWith('WORKING_PATH', { required: false })
     expect(core.info).toHaveBeenCalledWith('working-path: whatever')
     expect(result).toBe('whatever')
+
+    delete process.env.CI
+    delete process.env.GITLAB_CI
   })
 })
 

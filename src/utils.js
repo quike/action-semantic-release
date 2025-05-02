@@ -98,3 +98,14 @@ export const transformKey = (key) => {
   }
   return key.replace(/[- ]/g, '_').toUpperCase()
 }
+
+/**
+ * Retrieves a var from the environment or defaults.
+ *
+ * @param {string} envVar - The environment variable to check.
+ * @param {string} defaultValue - The default value to return if the environment variable is not set.
+ * @returns {string} The var value.
+ */
+export const getEnvVar = (envVar, defaultValue) => {
+  return process.env[envVar] || defaultValue
+}
