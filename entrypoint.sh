@@ -24,12 +24,6 @@ verify_parameter() {
 verify_requirements() {
   print "${FUNCNAME[0]}"
   verify_parameter "${WORKING_PATH}" "WORKING_PATH" "false"
-  if [ -n "$DEBUG_MODE" ] && [ "$DEBUG_MODE" = true ]; then
-    pwd
-    ls -la
-    ls -la /etc/action
-    ls -la /etc/action/src
-  fi
 }
 
 config() {
