@@ -19,7 +19,7 @@
     "@semantic-release/gitlab": "^13.2.4",
     "@semantic-release/npm": "^12.0.1",
     "@semantic-release/release-notes-generator": "^14.0.3",
-    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "conventional-changelog-conventionalcommits": "^9.0.0",
     "conventional-changelog-ember": "^5.0.0",
     "conventional-changelog-eslint": "^6.0.0",
     "execa": "^9.5.2",
