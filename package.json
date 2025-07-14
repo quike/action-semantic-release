@@ -33,7 +33,7 @@
     "@eslint/config-array": "^0.21.0",
     "@eslint/js": "^9.21.0",
     "@eslint/object-schema": "^2.1.6",
-    "@github/local-action": "^4.0.0",
+    "@github/local-action": "^5.0.0",
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
