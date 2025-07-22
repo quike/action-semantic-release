@@ -8,4 +8,4 @@
 [GitHub Action](https://docs.github.com/en/actions) for
 [semantic-release](https://www.github.com/semantic-release/semantic-release)
 
-- Documentation [here](docs/index.md).
+- Documentation [index](docs/index.md).
