@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@eslint/compat": "^2.0.0",
-    "@eslint/config-array": "^0.22.0",
+    "@eslint/config-array": "^0.23.0",
     "@eslint/js": "^9.21.0",
     "@eslint/object-schema": "^3.0.0",
     "@github/local-action": "^6.0.0",
