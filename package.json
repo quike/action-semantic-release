@@ -29,10 +29,10 @@
     "semantic-release-slack-bot": "^4.0.2"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.2.6",
+    "@eslint/compat": "^2.0.0",
     "@eslint/config-array": "^0.22.0",
     "@eslint/js": "^9.21.0",
-    "@eslint/object-schema": "^2.1.6",
+    "@eslint/object-schema": "^3.0.0",
     "@github/local-action": "^6.0.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
