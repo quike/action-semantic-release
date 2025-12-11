@@ -11,7 +11,7 @@
     "quike.mora <quike.mora@gmail.com>"
   ],
   "dependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^2.0.0",
     "@eslint/eslintrc": "^3.3.0",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/exec": "^7.0.0",
