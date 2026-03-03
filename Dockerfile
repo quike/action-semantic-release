@@ -19,7 +19,6 @@ COPY --chmod=555 entrypoint.sh "/etc/action/entrypoint.sh"
 COPY --chmod=444 src/ ./src/
 COPY --chmod=444 .releaserc.default "/etc/action/.releaserc.default"
 COPY ./package.json ./package-lock.json ./
-RUN chmod +x "/etc/action/entrypoint.sh" && npm ci --only=prod
+RUN chmod +x "/etc/action/entrypoint.sh" && npm ci --only=prod --legacy-peer-deps
 
 ENTRYPOINT ["/etc/action/entrypoint.sh"]
-
