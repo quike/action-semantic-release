@@ -37,10 +37,12 @@ jobs:
       - name: Set Test Environment
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "To test action, we are going to change stable image to internal Dockefile."
+            echo "To test action, we are going to change stable image to internal Dockerfile."
             grep "docker" < ./action.yml
             YQ_VERSION=v4.34.1
-            sudo wget "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" -O /usr/local/bin/yq
+            sudo wget \
+            "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" \
+            -O /usr/local/bin/yq
             yq -i '.runs.image = "Dockerfile"' ./action.yml
             echo "Now action under test should point to internal image."
             grep "Dockerfile" < ./action.yml
