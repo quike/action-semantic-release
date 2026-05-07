@@ -11,7 +11,7 @@ export default [
   js.configs.recommended,
   {
     plugins: {
-      import: fixupPluginRules(_import),
+      // import: fixupPluginRules(_import),
       prettier
     },
 
