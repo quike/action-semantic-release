@@ -5,18 +5,18 @@
  */
 
 const releaseRulesConventionalCommits = [
-  { type: 'feat', release: 'minor' },
-  { type: 'fix', release: 'patch' },
-  { type: 'perf', release: 'patch' },
-  { type: 'refactor', release: 'patch' },
-  { type: 'revert', release: 'patch' },
-  { type: 'BREAKING CHANGE', release: 'major' },
-  { type: 'chore', release: 'minor' },
-  { type: 'docs', release: false },
-  { type: 'style', release: false },
-  { type: 'test', release: false },
-  { type: 'ci', release: false },
-  { type: 'build', release: false }
+  { type: 'feat', breaking: false, release: 'minor' },
+  { type: 'fix', breaking: false, release: 'patch' },
+  { type: 'perf', breaking: false, release: 'patch' },
+  { type: 'refactor', breaking: false, release: 'patch' },
+  { type: 'revert', breaking: false, release: 'patch' },
+  { type: 'BREAKING CHANGE', breaking: true, release: 'major' },
+  { type: 'chore', breaking: false, release: 'minor' },
+  { type: 'docs', breaking: false, release: false },
+  { type: 'style', breaking: false, release: false },
+  { type: 'test', breaking: false, release: false },
+  { type: 'ci', breaking: false, release: false },
+  { type: 'build', breaking: false, release: false }
 ]
 
 export const defaultReleaseRules = new Map([['conventionalcommits', releaseRulesConventionalCommits]])

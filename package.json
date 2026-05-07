@@ -3,16 +3,15 @@
   "description": "Semantic Release GitHub Action",
   "version": "0.0.0",
   "type": "module",
-  "author": "quike.mora <quike.mora@gmail.com>",
+  "author": "quike.mora <616137+quike@users.noreply.github.com>",
   "bugs": {
     "url": "https://www.github.com/quike/action-semantic-release/issues"
   },
   "contributors": [
-    "quike.mora <quike.mora@gmail.com>"
+    "quike.mora <616137+quike@users.noreply.github.com>"
   ],
   "dependencies": {
-    "@actions/core": "^2.0.0",
-    "@eslint/eslintrc": "^3.3.0",
+    "@actions/core": "^3.0.1",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/exec": "^7.0.0",
     "@semantic-release/git": "^10.0.1",
@@ -31,20 +30,19 @@
   "devDependencies": {
     "@eslint/compat": "^2.0.0",
     "@eslint/config-array": "^0.23.0",
-    "@eslint/js": "^9.21.0",
+    "@eslint/js": "^10.0.1",
     "@eslint/object-schema": "^3.0.0",
-    "@github/local-action": "^6.0.0",
+    "@github/local-action": "^7.0.1",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@vercel/ncc": "^0.38.3",
     "@vitest/coverage-v8": "^4.0.0",
     "cosmiconfig": "^9.0.0",
-    "eslint": "^9.21.0",
+    "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.3",
-    "globals": "^16.0.0",
+    "globals": "^17.6.0",
     "make-coverage-badge": "^1.2.0",
     "prettier": "^3.5.1",
     "prettier-eslint": "^16.3.0",
