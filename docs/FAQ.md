@@ -8,10 +8,10 @@ This action ships an opt-in preset named `custom`. It is **not** a real
 [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog) package. When a plugin entry
 declares `preset: "custom"` and the action input `default-preset-info: true` is set, the action:
 
-1. Injects an opinionated `presetConfig` (visible `refactor` + `chore` sections, plus the `feature` alias that mirrors
-   upstream conventional-commits).
-2. Injects an opinionated `releaseRules` array (notably `chore: minor` and `refactor: patch`).
-3. Swaps the `preset` value back to `conventionalcommits` so semantic-release loads the real parser under the hood.
+- Injects an opinionated `presetConfig` (visible `refactor` + `chore` sections, plus the `feature` alias that mirrors
+  upstream conventional-commits).
+- Injects an opinionated `releaseRules` array (notably `chore: minor` and `refactor: patch`).
+- Swaps the `preset` value back to `conventionalcommits` so semantic-release loads the real parser under the hood.
 
 Any other preset (`conventionalcommits`, `angular`, `eslint`, `ember`, …) is passed through to semantic-release
 untouched, with no injection.
