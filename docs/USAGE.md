@@ -72,7 +72,7 @@ jobs:
 | **debug-mode**          | `false`   | To enable verbosity                                                                        |
 | **dry-run**             | `false`   | Dry Run execution                                                                          |
 | **default-config**      | `true`    | Force default config if not present                                                        |
-| **default-preset-info** | `true`    | Sets prefixed release rules and preset configs as callback if default info does not exists |
+| **default-preset-info** | `true`    | Inject opinionated `presetConfig`/`releaseRules` when a plugin uses `preset: "custom"`; see docs/FAQ.md |
 | **floating-tags**       | `false`   | Create floating tags from major and minor versions after release.                          |
 
 #### Environment Variables

@@ -28,13 +28,24 @@ const runAnalyzer = async (preset, messages) => {
   })
 }
 
-describe('preset integration: conventionalcommits (action injects custom rules)', () => {
+describe('preset integration: custom (action injects opinions, swaps to conventionalcommits parser)', () => {
   beforeEach(() => vi.clearAllMocks())
   afterEach(() => vi.restoreAllMocks())
 
+  it('should swap preset to conventionalcommits and attach presetConfig + releaseRules', async () => {
+    core.getBooleanInput.mockReturnValueOnce(true)
+    const plugins = await getPlugins({
+      plugins: [['@semantic-release/commit-analyzer', { preset: 'custom' }]]
+    })
+    const [, pluginConfig] = plugins[0]
+    expect(pluginConfig.preset).toBe('conventionalcommits')
+    expect(pluginConfig.presetConfig).toBeDefined()
+    expect(Array.isArray(pluginConfig.releaseRules)).toBe(true)
+  })
+
   const cases = [
     ['feat!: rename inputs', 'major'],
-    ['feat: add new input\n\nBREAKING CHANGE: input was renamed', 'major'],
+    ['feat: add input\n\nBREAKING CHANGE: input was renamed', 'major'],
     ['feat: add input', 'minor'],
     ['fix: handle null', 'patch'],
     ['perf: faster parse', 'patch'],
@@ -46,6 +57,39 @@ describe('preset integration: conventionalcommits (action injects custom rules)'
     ['test: add unit tests', null],
     ['ci: tweak workflow', null],
     ['build: update bundler', null]
+  ]
+
+  for (const [message, expected] of cases) {
+    it(`resolves "${message.split('\n')[0]}" to ${expected ?? 'no'} release`, async () => {
+      expect(await runAnalyzer('custom', [message])).toBe(expected)
+    })
+  }
+})
+
+describe('preset integration: conventionalcommits (action passes through to upstream defaults)', () => {
+  beforeEach(() => vi.clearAllMocks())
+  afterEach(() => vi.restoreAllMocks())
+
+  it('should leave preset and plugin config untouched', async () => {
+    core.getBooleanInput.mockReturnValueOnce(true)
+    const plugins = await getPlugins({
+      plugins: [['@semantic-release/commit-analyzer', { preset: 'conventionalcommits' }]]
+    })
+    const [, pluginConfig] = plugins[0]
+    expect(pluginConfig.preset).toBe('conventionalcommits')
+    expect(pluginConfig.presetConfig).toBeUndefined()
+    expect(pluginConfig.releaseRules).toBeUndefined()
+  })
+
+  const cases = [
+    ['feat!: rename inputs', 'major'],
+    ['feat: add input\n\nBREAKING CHANGE: x', 'major'],
+    ['feat: add input', 'minor'],
+    ['fix: handle null', 'patch'],
+    ['perf: faster parse', 'patch'],
+    ['chore: bump deps', null],
+    ['refactor: extract helper', null],
+    ['docs: improve readme', null]
   ]
 
   for (const [message, expected] of cases) {

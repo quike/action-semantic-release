@@ -29,15 +29,14 @@ describe('getPlugins', () => {
     expect(result).toEqual([])
   })
 
-  it('should return plugins as is if commit-analyzer already has a preset', async () => {
+  it('should inject presetConfig/releaseRules and swap preset when preset is "custom"', async () => {
     core.getBooleanInput.mockReturnValueOnce(true)
     const config = {
-      plugins: [['@semantic-release/commit-analyzer', { preset: 'conventionalcommits' }]]
+      plugins: [['@semantic-release/commit-analyzer', { preset: 'custom' }]]
     }
     const result = await getPlugins(config)
     expect(Array.isArray(result)).toBe(true)
 
-    // Find the commit-analyzer plugin
     const commitAnalyzerPlugin = result.find(
       (plugin) => Array.isArray(plugin) && plugin[0] === '@semantic-release/commit-analyzer'
     )
@@ -50,35 +49,65 @@ describe('getPlugins', () => {
     expect(pluginConfig).toMatchObject({
       preset: 'conventionalcommits',
       presetConfig: expect.any(Object),
-      releaseRules: expect.any(Object)
+      releaseRules: expect.any(Array)
     })
   })
 
-  it('should return passed plugins with expected modification', async () => {
+  it('should leave plugin config untouched for non-custom presets', async () => {
     core.getBooleanInput.mockReturnValueOnce(true)
     const config = {
+      plugins: [['@semantic-release/commit-analyzer', { preset: 'conventionalcommits' }]]
+    }
+    const result = await getPlugins(config)
+    expect(result).toEqual(config.plugins)
+  })
+
+  it('should respect existing presetConfig and releaseRules on a custom-preset plugin', async () => {
+    core.getBooleanInput.mockReturnValueOnce(true)
+    const existingPresetConfig = { types: [{ type: 'feat', section: 'Features' }] }
+    const existingReleaseRules = [{ type: 'chore', release: 'minor' }]
+    const config = {
       plugins: [
-        // should include both
-        ['@semantic-release/commit-analyzer', { randomConfig: true, preset: 'conventionalcommits' }],
-        // should include releaseRules only
         [
           '@semantic-release/commit-analyzer',
           {
-            presetConfig: {
-              types: [{ type: 'feat', section: 'Features' }]
-            },
-            preset: 'conventionalcommits'
+            preset: 'custom',
+            presetConfig: existingPresetConfig,
+            releaseRules: existingReleaseRules
+          }
+        ]
+      ]
+    }
+    const result = await getPlugins(config)
+    const [, pluginConfig] = result[0]
+    expect(pluginConfig.preset).toBe('conventionalcommits')
+    expect(pluginConfig.presetConfig).toEqual(existingPresetConfig)
+    expect(pluginConfig.releaseRules).toEqual(existingReleaseRules)
+  })
+
+  it('should mix injection across multiple commit-analyzer plugin entries', async () => {
+    core.getBooleanInput.mockReturnValueOnce(true)
+    const config = {
+      plugins: [
+        // both fields injected, preset swapped
+        ['@semantic-release/commit-analyzer', { randomConfig: true, preset: 'custom' }],
+        // releaseRules injected, presetConfig kept
+        [
+          '@semantic-release/commit-analyzer',
+          {
+            presetConfig: { types: [{ type: 'feat', section: 'Features' }] },
+            preset: 'custom'
           }
         ],
-        // should include presetConfig only
+        // presetConfig injected, releaseRules kept
         [
           '@semantic-release/commit-analyzer',
           {
             releaseRules: [{ type: 'chore', release: 'minor' }],
-            preset: 'conventionalcommits'
+            preset: 'custom'
           }
         ],
-        // should respect existing config
+        // not the custom preset, untouched
         [
           '@semantic-release/commit-analyzer',
           {
@@ -86,10 +115,10 @@ describe('getPlugins', () => {
             preset: 'angular'
           }
         ],
-        ['@semantic-release/commit-analyzer', { randomConfig: true }], // No "preset", should remain unchanged
-        ['@semantic-release/release-notes-generator', { otherSetting: 42, preset: 'conventionalcommits' }],
-        ['@semantic-release/changelog', { preset: 'conventionalcommits' }], // no change required
-        ['@semantic-release/release-notes-generator'], // No config, should remain unchanged
+        ['@semantic-release/commit-analyzer', { randomConfig: true }],
+        ['@semantic-release/release-notes-generator', { otherSetting: 42, preset: 'custom' }],
+        ['@semantic-release/changelog', { preset: 'custom' }],
+        ['@semantic-release/release-notes-generator'],
         '@semantic-release/git'
       ]
     }
@@ -98,11 +127,11 @@ describe('getPlugins', () => {
       (plugin) => Array.isArray(plugin) && plugin[0] === '@semantic-release/commit-analyzer'
     )
     expect(commitAnalyzerPlugins.length).toBeGreaterThan(0)
+
     commitAnalyzerPlugins.forEach((plugin) => {
       const [, pluginConfig] = plugin
-
-      // If pluginConfig has the required properties, we check them
-      if (pluginConfig && pluginConfig.preset === 'conventionalcommits') {
+      if (!pluginConfig) return
+      if (pluginConfig.preset === 'conventionalcommits') {
         expect(pluginConfig).toMatchObject({
           presetConfig: expect.any(Object),
           releaseRules: expect.any(Object)
@@ -111,21 +140,19 @@ describe('getPlugins', () => {
     })
   })
 
-  it('should add default preset if commit-analyzer has no preset', async () => {
+  it('should leave commit-analyzer alone when it has no preset', async () => {
     const config = {
       plugins: [['@semantic-release/commit-analyzer', {}]]
     }
     const result = await getPlugins(config)
-
     expect(result).toEqual(config.plugins)
   })
 
-  it('should add default preset if commit-analyzer is a string', async () => {
+  it('should leave commit-analyzer alone when it is a bare string', async () => {
     const config = {
       plugins: ['@semantic-release/commit-analyzer']
     }
     const result = await getPlugins(config)
-
     expect(result).toEqual(config.plugins)
   })
 
@@ -134,28 +161,24 @@ describe('getPlugins', () => {
       plugins: ['random-plugin', ['@semantic-release/commit-analyzer', {}], 'another-plugin']
     }
     const result = await getPlugins(config)
-
     expect(result).toEqual(config.plugins)
   })
 
-  it('should work with multiple instances of commit-analyzer', async () => {
+  it('should pass through multiple commit-analyzer entries without preset', async () => {
     core.getBooleanInput.mockReturnValueOnce(true)
     const config = {
       plugins: [['@semantic-release/commit-analyzer', {}], '@semantic-release/commit-analyzer', 'random-plugin']
     }
     const result = await getPlugins(config)
-
     expect(result).toEqual(config.plugins)
   })
 
-  it('should not add default if conventionalcommits preset is not set', async () => {
-    const consoleErrorSpy = vi.spyOn(core, 'error').mockImplementation(() => {})
-    core.getBooleanInput.mockReturnValueOnce(true)
+  it('should not inject when default-preset-info is false', async () => {
+    core.getBooleanInput.mockReturnValueOnce(false)
     const config = {
-      plugins: [['@semantic-release/commit-analyzer'], ['@semantic-release/release-notes-generator']]
+      plugins: [['@semantic-release/commit-analyzer', { preset: 'custom' }]]
     }
     const result = await getPlugins(config)
-
     expect(result).toEqual(config.plugins)
   })
 })
