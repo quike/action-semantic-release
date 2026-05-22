@@ -8,11 +8,10 @@
     [
       "@semantic-release/commit-analyzer",
       {
-        "preset": "conventionalcommits"
+        "preset": "custom"
       }
     ]
   ],
-  "preset": "conventionalcommits",
   "debug": true,
   "dryRun": false,
   "ci": false

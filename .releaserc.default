@@ -5,14 +5,13 @@
   ],
   "plugins": [
     ["@semantic-release/commit-analyzer", {
-      "preset": "conventionalcommits"
+      "preset": "custom"
     }],
     ["@semantic-release/release-notes-generator", {
-      "preset": "conventionalcommits"
+      "preset": "custom"
     }],
     "@semantic-release/git"
   ],
-  "preset": "conventionalcommits",
   "debug": true,
   "dryRun": false,
   "ci": false

@@ -35,10 +35,10 @@ inputs:
     default: 'true'
   default-preset-info:
     description:
-      'For presets that expects a configuration object, such as conventionalcommits, the presetConfig & releaseRules
-      options must be set. Some basic predefined configuration is available hardcoded in semanti-release, but for
-      conventionalcommits if no presetConfig and releaseRules are passed, it falls back to the default preset
-      configuration: angular ignoring the input.'
+      'Enables injection of the action''s opinionated presetConfig and releaseRules when a plugin entry declares preset:
+      "custom". The action then swaps the preset back to "conventionalcommits" before semantic-release loads the parser.
+      Any other preset value (conventionalcommits, angular, eslint, ember, …) is passed through to semantic-release
+      untouched. See docs/FAQ.md for details on the "custom" preset policy.'
     required: false
     default: 'true'
   floating-tags:
