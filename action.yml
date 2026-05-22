@@ -35,10 +35,10 @@ inputs:
     default: 'true'
   default-preset-info:
     description:
-      'Enables injection of the action''s opinionated presetConfig and releaseRules when a plugin entry declares
-      preset: "custom". The action then swaps the preset back to "conventionalcommits" before semantic-release loads
-      the parser. Any other preset value (conventionalcommits, angular, eslint, ember, …) is passed through to
-      semantic-release untouched. See docs/FAQ.md for details on the "custom" preset policy.'
+      'Enables injection of the action''s opinionated presetConfig and releaseRules when a plugin entry declares preset:
+      "custom". The action then swaps the preset back to "conventionalcommits" before semantic-release loads the parser.
+      Any other preset value (conventionalcommits, angular, eslint, ember, …) is passed through to semantic-release
+      untouched. See docs/FAQ.md for details on the "custom" preset policy.'
     required: false
     default: 'true'
   floating-tags:

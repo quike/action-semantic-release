@@ -30,7 +30,7 @@ and [`src/custom-preset-config.js`](../src/custom-preset-config.js).
 | ----------------- | ---------------------------------- | ---------------------------------- | ----------------------------------------------- |
 | `feat`            | Features (visible)                 | Features (visible)                 | same                                            |
 | `feature` (alias) | Features (visible)                 | Features (visible)                 | same                                            |
-| `fix`             | Bug Fixes (visible)                | Bug Fixes (visible)                | same                                            |
+| `fix`             | `Bug Fixes` (visible)              | `Bug Fixes` (visible)              | same                                            |
 | `perf`            | Performance Improvements (visible) | Performance Improvements (visible) | same                                            |
 | `revert`          | Reverts (visible)                  | Reverts (visible)                  | same                                            |
 | `refactor`        | Code Refactoring (hidden)          | Code Refactoring (visible)         | ← `custom` surfaces refactor work in changelogs |
@@ -39,7 +39,7 @@ and [`src/custom-preset-config.js`](../src/custom-preset-config.js).
 | `style`           | Styles (hidden)                    | Styles (hidden)                    | same                                            |
 | `test`            | Tests (hidden)                     | Tests (hidden)                     | same                                            |
 | `ci`              | Continuous Integration (hidden)    | Continuous Integration (hidden)    | same                                            |
-| `build`           | Build System (hidden)              | Build System (hidden)              | same                                            |
+| `build`           | `Build System` (hidden)            | `Build System` (hidden)            | same                                            |
 
 #### Release rules: `custom` vs upstream `conventionalcommits`
 
