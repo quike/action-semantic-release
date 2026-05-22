@@ -62,7 +62,11 @@ describe('analyzeCommits with custom release rules over conventionalcommits pars
   const logger = { log: () => {} }
 
   const run = (messages) =>
-    analyzeCommits(pluginConfig, { commits: messages.map((message) => ({ message, hash: 'x' })), logger, cwd: process.cwd() })
+    analyzeCommits(pluginConfig, {
+      commits: messages.map((message) => ({ message, hash: 'x' })),
+      logger,
+      cwd: process.cwd()
+    })
 
   it('should resolve "feat!" to a major release', async () => {
     expect(await run(['feat!: hyphenate component inputs and add self-test pipeline'])).toBe('major')

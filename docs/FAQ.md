@@ -48,21 +48,21 @@ Compares what each commit triggers as a release. "Upstream" here means
 applied to commits parsed by `conventional-changelog-conventionalcommits`. Source:
 [`src/custom-release-rules.js`](../src/custom-release-rules.js).
 
-| Rule              | Upstream (`conventionalcommits`) | This action (`custom`) | Effect                                                 |
-| ----------------- | -------------------------------- | ---------------------- | ------------------------------------------------------ |
-| `breaking: true`  | major                            | major                  | same                                                   |
-| `revert: true`    | patch                            | patch                  | same (parser-flagged reverts like `Revert "feat: x"`)  |
-| `feat`            | minor                            | minor                  | same                                                   |
-| `fix`             | patch                            | patch                  | same                                                   |
-| `perf`            | patch                            | patch                  | same                                                   |
-| `refactor`        | no release                       | patch                  | ← `custom` cuts a patch for refactor work              |
-| `revert` (type)   | no release                       | patch                  | ← `custom` cuts a patch for `revert:` typed commits    |
-| `chore`           | no release                       | minor                  | ← `custom` cuts a minor for chores (see next section)  |
-| `docs`            | no release                       | no release             | same                                                   |
-| `style`           | no release                       | no release             | same                                                   |
-| `test`            | no release                       | no release             | same                                                   |
-| `ci`              | no release                       | no release             | same                                                   |
-| `build`           | no release                       | no release             | same                                                   |
+| Rule             | Upstream (`conventionalcommits`) | This action (`custom`) | Effect                                                |
+| ---------------- | -------------------------------- | ---------------------- | ----------------------------------------------------- |
+| `breaking: true` | major                            | major                  | same                                                  |
+| `revert: true`   | patch                            | patch                  | same (parser-flagged reverts like `Revert "feat: x"`) |
+| `feat`           | minor                            | minor                  | same                                                  |
+| `fix`            | patch                            | patch                  | same                                                  |
+| `perf`           | patch                            | patch                  | same                                                  |
+| `refactor`       | no release                       | patch                  | ← `custom` cuts a patch for refactor work             |
+| `revert` (type)  | no release                       | patch                  | ← `custom` cuts a patch for `revert:` typed commits   |
+| `chore`          | no release                       | minor                  | ← `custom` cuts a minor for chores (see next section) |
+| `docs`           | no release                       | no release             | same                                                  |
+| `style`          | no release                       | no release             | same                                                  |
+| `test`           | no release                       | no release             | same                                                  |
+| `ci`             | no release                       | no release             | same                                                  |
+| `build`          | no release                       | no release             | same                                                  |
 
 ### **Why does `chore` bump a minor release under the `custom` preset?**
 
