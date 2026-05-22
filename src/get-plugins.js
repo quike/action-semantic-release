@@ -15,10 +15,11 @@ const UNDERLYING_PRESET = 'conventionalcommits'
 /**
  * Retrieves and processes configuration plugins for the semantic release action.
  *
- * When a plugin entry declares `preset: 'custom'`, this function injects the custom presetConfig
- * and releaseRules from `custom-preset-config.js` / `custom-release-rules.js`, then swaps the
- * preset name back to `conventionalcommits` so semantic-release can find the actual parser
- * (there is no `conventional-changelog-custom` package). Any other preset is passed through
+ * When a plugin entry declares `preset: 'custom'`, this function always swaps the preset back to
+ * `conventionalcommits` so semantic-release can find the actual parser (there is no
+ * `conventional-changelog-custom` package). When `default-preset-info` is also enabled, it
+ * additionally injects the opinionated `presetConfig` / `releaseRules` from
+ * `custom-preset-config.js` / `custom-release-rules.js`. Any other preset is passed through
  * untouched.
  *
  * @param {Object} config - The configuration object.
@@ -30,46 +31,36 @@ export const getPlugins = async (config) => {
     return {}
   }
 
-  let plugins = config.plugins || []
+  const plugins = config.plugins || []
+  const defaultPresetInfoInput = getBooleanInput(INPUTS.DEFAULT_PRESET_INFO)
 
-  let defaultPresetInfoInput = getBooleanInput(INPUTS.DEFAULT_PRESET_INFO)
-  if (defaultPresetInfoInput) {
-    return plugins.map((plugin) => {
-      if (
-        Array.isArray(plugin) &&
-        Object.hasOwn(PLUGIN_CONFIG, plugin[0]) &&
-        typeof plugin[1] === 'object' &&
-        plugin[1] !== null &&
-        plugin[1].preset === CUSTOM_PRESET
-      ) {
-        const requiredConfig = PLUGIN_CONFIG[plugin[0]]
-        let pluginConfig = { ...plugin[1] }
-
-        requiredConfig.forEach((field) => {
-          if (
-            !Object.hasOwn(pluginConfig, field) ||
-            pluginConfig[field] == null ||
-            Object.keys(pluginConfig[field]).length === 0
-          ) {
-            switch (field) {
-              case 'presetConfig':
-                pluginConfig.presetConfig = getCustomPresetConfig(CUSTOM_PRESET)
-                break
-              case 'releaseRules':
-                pluginConfig.releaseRules = getCustomReleaseRules(CUSTOM_PRESET)
-                break
-            }
-          }
-        })
-
-        pluginConfig.preset = UNDERLYING_PRESET
-
-        return [plugin[0], pluginConfig]
-      }
+  return plugins.map((plugin) => {
+    if (
+      !Array.isArray(plugin) ||
+      !Object.hasOwn(PLUGIN_CONFIG, plugin[0]) ||
+      typeof plugin[1] !== 'object' ||
+      plugin[1] === null ||
+      plugin[1].preset !== CUSTOM_PRESET
+    ) {
       return plugin
-    })
-  }
+    }
 
-  core.debug(`Plugins: ${JSON.stringify(plugins)}`)
-  return plugins
+    const pluginConfig = { ...plugin[1] }
+
+    if (defaultPresetInfoInput) {
+      PLUGIN_CONFIG[plugin[0]].forEach((field) => {
+        if (
+          !Object.hasOwn(pluginConfig, field) ||
+          pluginConfig[field] == null ||
+          Object.keys(pluginConfig[field]).length === 0
+        ) {
+          if (field === 'presetConfig') pluginConfig.presetConfig = getCustomPresetConfig(CUSTOM_PRESET)
+          if (field === 'releaseRules') pluginConfig.releaseRules = getCustomReleaseRules(CUSTOM_PRESET)
+        }
+      })
+    }
+
+    pluginConfig.preset = UNDERLYING_PRESET
+    return [plugin[0], pluginConfig]
+  })
 }

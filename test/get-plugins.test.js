@@ -173,10 +173,22 @@ describe('getPlugins', () => {
     expect(result).toEqual(config.plugins)
   })
 
-  it('should not inject when default-preset-info is false', async () => {
+  it('should swap preset but skip injection when default-preset-info is false', async () => {
     core.getBooleanInput.mockReturnValueOnce(false)
     const config = {
       plugins: [['@semantic-release/commit-analyzer', { preset: 'custom' }]]
+    }
+    const result = await getPlugins(config)
+    const [, pluginConfig] = result[0]
+    expect(pluginConfig.preset).toBe('conventionalcommits')
+    expect(pluginConfig.presetConfig).toBeUndefined()
+    expect(pluginConfig.releaseRules).toBeUndefined()
+  })
+
+  it('should pass through non-custom presets even when default-preset-info is false', async () => {
+    core.getBooleanInput.mockReturnValueOnce(false)
+    const config = {
+      plugins: [['@semantic-release/commit-analyzer', { preset: 'conventionalcommits' }]]
     }
     const result = await getPlugins(config)
     expect(result).toEqual(config.plugins)

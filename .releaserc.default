@@ -12,7 +12,6 @@
     }],
     "@semantic-release/git"
   ],
-  "preset": "custom",
   "debug": true,
   "dryRun": false,
   "ci": false
