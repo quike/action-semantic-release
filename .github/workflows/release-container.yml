@@ -77,12 +77,7 @@ jobs:
           ref: main
           token: ${{ secrets.GHTOKEN }}
       - name: Install yq
-        run: |
-          YQ_VERSION=v4.34.1
-          sudo wget \
-            "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" \
-            -O /usr/local/bin/yq
-          sudo chmod +x /usr/local/bin/yq
+        run: sudo snap install yq
       - name: Compute released version
         id: version
         run: |

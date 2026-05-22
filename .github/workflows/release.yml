@@ -38,11 +38,7 @@ jobs:
         run: |
           echo "Swap action.yml to local Dockerfile so the release runs against current source."
           grep "docker" < ./action.yml
-          YQ_VERSION=v4.34.1
-          sudo wget \
-            "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" \
-            -O /usr/local/bin/yq
-          sudo chmod +x /usr/local/bin/yq
+          sudo snap install yq
           yq -i '.runs.image = "Dockerfile"' ./action.yml
           echo "Now action under test points to internal image."
           grep "Dockerfile" < ./action.yml
