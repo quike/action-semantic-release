@@ -76,8 +76,6 @@ jobs:
         with:
           ref: main
           token: ${{ secrets.GHTOKEN }}
-      - name: Install yq
-        run: sudo snap install yq
       - name: Compute released version
         id: version
         run: |
