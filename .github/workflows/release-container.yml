@@ -61,3 +61,51 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  bump-action-image-tag:
+    name: Bump action.yml image to released version
+    needs: build-and-push-image
+    if: ${{ github.event_name == 'release' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          token: ${{ secrets.GHTOKEN }}
+      - name: Install yq
+        run: |
+          YQ_VERSION=v4.34.1
+          sudo wget \
+            "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" \
+            -O /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
+      - name: Compute released version
+        id: version
+        run: |
+          TAG_NAME="${{ github.event.release.tag_name }}"
+          VERSION="${TAG_NAME#v}"
+          echo "value=${VERSION}" >> "$GITHUB_OUTPUT"
+      - name: Update action.yml
+        run: |
+          yq -i ".runs.image = \"docker://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.value }}\"" ./action.yml
+          grep "image:" ./action.yml
+      - name: Open bump PR
+        env:
+          GH_TOKEN: ${{ secrets.GHTOKEN }}
+        run: |
+          BRANCH="ci/bump-action-image-${{ steps.version.outputs.value }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add action.yml
+          git commit -m "ci: bump action.yml image to ${{ steps.version.outputs.value }}"
+          git push origin "$BRANCH"
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "ci: bump action.yml image to ${{ steps.version.outputs.value }}" \
+            --body "Auto-generated after release \`v${{ steps.version.outputs.value }}\` to keep \`action.yml\` in sync with the published container image."
