@@ -18,10 +18,11 @@ export const verifyRelease = async (result) => {
   core.info(`Release ${nextRelease.type} with Version ${nextRelease.version}`)
 
   const { version, notes, type, channel, gitHead, gitTag, name } = nextRelease
-  const [major, minor, patch] = version.split('.')
+  const versionParts = /^(\d+)\.(\d+)\.(\d+)/.exec(version) || []
+  const [, major, minor, patch] = versionParts
 
   const release = {
-    published: nextRelease !== undefined,
+    published: true,
     last: {
       version: lastRelease.version !== undefined ? lastRelease.version : '',
       gitHead: lastRelease.gitHead !== undefined ? lastRelease.gitHead : '',

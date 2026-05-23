@@ -130,32 +130,55 @@ describe('getBooleanInput', () => {
   })
 
   it('should return the boolean input when provided', () => {
+    core.getInput.mockReturnValue('true')
     core.getBooleanInput.mockReturnValue(true)
 
     const result = getBooleanInput(INPUTS.DRY_RUN)
 
+    expect(core.getInput).toHaveBeenCalledWith('dry-run', { required: false })
     expect(core.getBooleanInput).toHaveBeenCalledWith('dry-run', { required: false })
     expect(core.info).toHaveBeenCalledWith('dry-run: true')
     expect(result).toBe(true)
   })
 
-  it('should return the default value when input is undefined', () => {
-    core.getBooleanInput.mockReturnValue(undefined)
+  it('should return the configured default when the env var is empty', () => {
+    core.getInput.mockReturnValue('')
 
     const result = getBooleanInput(INPUTS.DRY_RUN)
 
-    expect(core.getBooleanInput).toHaveBeenCalledWith('dry-run', { required: false })
-    expect(core.info).toHaveBeenCalledWith('dry-run: undefined')
+    expect(core.getInput).toHaveBeenCalledWith('dry-run', { required: false })
+    expect(core.getBooleanInput).not.toHaveBeenCalled()
+    expect(core.info).toHaveBeenCalledWith('dry-run: (using default) false')
     expect(result).toBe(false)
+  })
+
+  it('should return the configured default when the env var is undefined', () => {
+    core.getInput.mockReturnValue(undefined)
+
+    const result = getBooleanInput(INPUTS.DRY_RUN)
+
+    expect(core.getBooleanInput).not.toHaveBeenCalled()
+    expect(result).toBe(false)
+  })
+
+  it('should not swallow malformed boolean values', () => {
+    core.getInput.mockReturnValue('yes')
+    core.getBooleanInput.mockImplementation(() => {
+      throw new TypeError('Input does not meet YAML 1.2 "Core Schema" specification.')
+    })
+
+    expect(() => getBooleanInput(INPUTS.DRY_RUN)).toThrow(/YAML 1.2/)
   })
 
   it('should return the boolean value when input is provided and CI is GitLab', () => {
     process.env.CI = 'true'
     process.env.GITLAB_CI = 'true'
+    core.getInput.mockReturnValue('true')
     core.getBooleanInput.mockReturnValue(true)
 
     const result = getBooleanInput(INPUTS.DEBUG_MODE)
 
+    expect(core.getInput).toHaveBeenCalledWith('DEBUG_MODE', { required: false })
     expect(core.getBooleanInput).toHaveBeenCalledWith('DEBUG_MODE', { required: false })
     expect(core.info).toHaveBeenCalledWith('debug-mode: true')
     expect(result).toBe(true)
