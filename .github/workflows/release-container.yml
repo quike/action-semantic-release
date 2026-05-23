@@ -109,7 +109,11 @@ jobs:
 
           git add action.yml
           git commit -m "${TITLE}"
-          git push --force-with-lease origin "${BRANCH}"
+          # `--force` (not `--force-with-lease`): the local branch was just created via
+          # `git checkout -B` and has no remote-tracking ref, so `--force-with-lease` would
+          # treat the remote as "stale info" and reject. This branch is bot-managed and
+          # any manual edits to it are documented as overwritten on the next release.
+          git push --force origin "${BRANCH}"
 
           existing=$(gh pr list --head "${BRANCH}" --state open --json number --jq '.[0].number // empty')
           if [ -n "${existing}" ]; then
