@@ -32,7 +32,21 @@ export const setFloatingTags = async (release, { cwd = process.cwd(), env = proc
 }
 
 /**
- * Deletes a Git tag both locally and remotely.
+ * Detects whether an execa error is a benign "tag does not exist" failure that
+ * can be safely ignored (common on the first release of a major/minor floating tag).
+ *
+ * @param {Error} error
+ * @returns {boolean}
+ */
+const isMissingTagError = (error) => {
+  const message = String(error?.stderr ?? '') + ' ' + String(error?.message ?? '')
+  return /tag '[^']*' not found|remote ref does not exist/i.test(message)
+}
+
+/**
+ * Deletes a Git tag both locally and remotely. Silently tolerates "tag does not
+ * exist" failures (first-release case); rethrows any other error so the action
+ * fails fast instead of masking real problems.
  *
  * @param {string} myTag - The name of the tag to delete.
  * @param {Object} options - Options for deleting the tag.
@@ -44,9 +58,15 @@ const deleteTag = async (myTag, options) => {
   core.info(`Deleting tag: ${myTag}`)
   try {
     await execa('git', ['tag', myTag, '-d'], options)
+  } catch (error) {
+    if (!isMissingTagError(error)) throw error
+    core.info(`Local tag '${myTag}' did not exist; skipping local delete.`)
+  }
+  try {
     await execa('git', ['push', 'origin', '--delete', myTag], options)
   } catch (error) {
-    core.error(`Unable to delete tag. Error: ${error}`)
+    if (!isMissingTagError(error)) throw error
+    core.info(`Remote tag '${myTag}' did not exist; skipping remote delete.`)
   }
 }
 
