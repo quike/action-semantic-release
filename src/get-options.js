@@ -19,7 +19,7 @@ export const getOptions = async (config) => {
   let debugModeInput = getBooleanInput(INPUTS.DEBUG_MODE)
 
   const options = {
-    branches: config.branches || ['master', 'main'],
+    branches: config.branches || [{ name: 'master' }, { name: 'main' }],
     repositoryUrl: config.repositoryUrl || '',
     plugins: (await getPlugins(config)) || config.plugins || [],
     ci: config.ci !== undefined ? config.ci : true,
