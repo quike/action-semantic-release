@@ -82,23 +82,40 @@ jobs:
           TAG_NAME="${{ github.event.release.tag_name }}"
           VERSION="${TAG_NAME#v}"
           echo "value=${VERSION}" >> "$GITHUB_OUTPUT"
-      - name: Update action.yml
-        run: |
-          sed -i "s|image: 'docker://[^']*'|image: 'docker://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.value }}'|" ./action.yml
-          grep "image:" ./action.yml
-      - name: Open bump PR
+      - name: Update or open bump PR
         env:
           GH_TOKEN: ${{ secrets.GHTOKEN }}
         run: |
-          BRANCH="ci/bump-action-image-${{ steps.version.outputs.value }}"
+          # Renovate/Dependabot-style update-in-place: one canonical branch and
+          # PR for the bump, force-pushed and re-titled on each release. Avoids
+          # piling up duplicate PRs when several releases land back-to-back.
+          BRANCH="ci/bump-action-image"
+          VERSION="${{ steps.version.outputs.value }}"
+          TITLE="ci: bump action.yml image to ${VERSION}"
+          BODY="Auto-generated after release \`v${VERSION}\` to keep \`action.yml\` in sync with the published container image. This PR is updated in place by the release pipeline; force-pushes will overwrite manual changes."
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BRANCH"
+
+          # Reset the bump branch to the tip of main and re-apply the image update.
+          git checkout -B "${BRANCH}"
+          sed -i "s|image: 'docker://[^']*'|image: 'docker://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${VERSION}'|" ./action.yml
+          grep "image:" ./action.yml
+
+          if git diff --quiet -- action.yml; then
+            echo "action.yml already at ${VERSION} on main; nothing to bump."
+            exit 0
+          fi
+
           git add action.yml
-          git commit -m "ci: bump action.yml image to ${{ steps.version.outputs.value }}"
-          git push origin "$BRANCH"
-          gh pr create \
-            --base main \
-            --head "$BRANCH" \
-            --title "ci: bump action.yml image to ${{ steps.version.outputs.value }}" \
-            --body "Auto-generated after release \`v${{ steps.version.outputs.value }}\` to keep \`action.yml\` in sync with the published container image."
+          git commit -m "${TITLE}"
+          git push --force-with-lease origin "${BRANCH}"
+
+          existing=$(gh pr list --head "${BRANCH}" --state open --json number --jq '.[0].number // empty')
+          if [ -n "${existing}" ]; then
+            echo "Updating existing PR #${existing}"
+            gh pr edit "${existing}" --title "${TITLE}" --body "${BODY}"
+          else
+            echo "Opening new bump PR"
+            gh pr create --base main --head "${BRANCH}" --title "${TITLE}" --body "${BODY}"
+          fi
