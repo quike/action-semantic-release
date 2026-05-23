@@ -1,12 +1,17 @@
 name: 'action-semver'
 description: 'Github action to release projects using semantic-release'
 author: 'quike'
+
 branding:
   icon: share-2
   color: yellow
+
 inputs:
   dry-run:
-    description: 'The objective of the dry-run mode is to get a preview of the pending release. Dry-run mode skips the following steps: prepare, publish, addChannel, success and fail. In addition to this it prints the next version and release notes to the console.'
+    description:
+      'The objective of the dry-run mode is to get a preview of the pending release. Dry-run mode skips the following
+      steps: prepare, publish, addChannel, success and fail. In addition to this it prints the next version and release
+      notes to the console.'
     required: false
     default: 'false'
   working-path:
@@ -29,13 +34,18 @@ inputs:
     required: false
     default: 'true'
   default-preset-info:
-    description: 'Enables injection of the action''s opinionated presetConfig and releaseRules when a plugin entry declares preset: "custom". The action then swaps the preset back to "conventionalcommits" before semantic-release loads the parser. Any other preset value (conventionalcommits, angular, eslint, ember, …) is passed through to semantic-release untouched. See docs/FAQ.md for details on the "custom" preset policy.'
+    description:
+      'Enables injection of the action''s opinionated presetConfig and releaseRules when a plugin entry declares preset:
+      "custom". The action then swaps the preset back to "conventionalcommits" before semantic-release loads the parser.
+      Any other preset value (conventionalcommits, angular, eslint, ember, …) is passed through to semantic-release
+      untouched. See docs/FAQ.md for details on the "custom" preset policy.'
     required: false
     default: 'true'
   floating-tags:
     description: 'Create floating tags from major and minor versions after release.'
     required: false
     default: 'false'
+
 outputs:
   release-published:
     description: 'True if a new release is performed, false otherwise.'
@@ -53,6 +63,7 @@ outputs:
     description: 'SHA value associated to release commit.'
   release-git-tag:
     description: 'Git Tag associated to release commit.'
+
 runs:
   using: 'docker'
   image: 'docker://ghcr.io/quike/action-semantic-release:3.0.1'

@@ -84,7 +84,7 @@ jobs:
           echo "value=${VERSION}" >> "$GITHUB_OUTPUT"
       - name: Update action.yml
         run: |
-          yq -i ".runs.image = \"docker://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.value }}\"" ./action.yml
+          sed -i "s|image: 'docker://[^']*'|image: 'docker://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.value }}'|" ./action.yml
           grep "image:" ./action.yml
       - name: Open bump PR
         env:
