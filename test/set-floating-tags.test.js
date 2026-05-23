@@ -60,7 +60,7 @@ describe('setFloatingTags', () => {
     expect(result).toEqual({})
   })
 
-  it('should capture an error when a tag cannot be deleted', async () => {
+  it('should propagate a non-missing-tag delete error', async () => {
     const release = {
       new: {
         major: 1,
@@ -69,19 +69,64 @@ describe('setFloatingTags', () => {
       }
     }
 
-    // Mock `execa` to throw an error when deleting a tag
     execa.mockImplementation((command, args) => {
       if (command === 'git' && args.includes('-d')) {
-        throw new Error('Failed to delete tag')
+        const err = new Error('fatal: unable to access remote: Permission denied')
+        err.stderr = 'fatal: Permission denied'
+        throw err
+      }
+      return Promise.resolve()
+    })
+
+    await expect(setFloatingTags(release, {})).rejects.toThrow(/Permission denied/)
+  })
+
+  it('should swallow a "tag not found" delete error (first-release case)', async () => {
+    const release = {
+      new: {
+        major: 3,
+        minor: 0,
+        gitHead: 'abc123'
+      }
+    }
+
+    execa.mockImplementation((command, args) => {
+      if (command === 'git' && args.includes('-d')) {
+        const err = new Error("error: tag 'v3' not found.")
+        err.stderr = "error: tag 'v3' not found."
+        throw err
       }
       return Promise.resolve()
     })
 
     const result = await setFloatingTags(release, {})
 
-    expect(core.error).toHaveBeenCalledWith('Unable to delete tag. Error: Error: Failed to delete tag')
-    expect(core.info).toHaveBeenCalledWith('Setting up env pre tagging with user: ' + DEFAULT_USER.USER_NAME)
-    expect(result).toEqual({ majorTag: 'v1', minorTag: 'v1.0' })
+    expect(core.info).toHaveBeenCalledWith(expect.stringMatching(/did not exist; skipping local delete/))
+    expect(result).toEqual({ majorTag: 'v3', minorTag: 'v3.0' })
+  })
+
+  it('should swallow a "remote ref does not exist" push-delete error', async () => {
+    const release = {
+      new: {
+        major: 3,
+        minor: 0,
+        gitHead: 'abc123'
+      }
+    }
+
+    execa.mockImplementation((command, args) => {
+      if (command === 'git' && args.includes('--delete')) {
+        const err = new Error('remote ref does not exist')
+        err.stderr = 'error: unable to delete v3: remote ref does not exist'
+        throw err
+      }
+      return Promise.resolve()
+    })
+
+    const result = await setFloatingTags(release, {})
+
+    expect(core.info).toHaveBeenCalledWith(expect.stringMatching(/did not exist; skipping remote delete/))
+    expect(result).toEqual({ majorTag: 'v3', minorTag: 'v3.0' })
   })
 
   it('should capture an error when a tag cannot be created', async () => {

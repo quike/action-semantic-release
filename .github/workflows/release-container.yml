@@ -86,6 +86,25 @@ jobs:
         run: |
           sed -i "s|image: 'docker://[^']*'|image: 'docker://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.value }}'|" ./action.yml
           grep "image:" ./action.yml
+      - name: Close stale bump PRs
+        env:
+          GH_TOKEN: ${{ secrets.GHTOKEN }}
+        run: |
+          # Multiple releases (e.g., back-to-back chore commits) can each spawn
+          # a bump PR. They all touch the same line in action.yml, so they'd
+          # conflict. Close any still-open bump PRs before opening the new one
+          # — only the latest version's PR is meaningful.
+          stale=$(gh pr list \
+            --state open \
+            --search 'in:title "ci: bump action.yml image to"' \
+            --json number \
+            --jq '.[].number')
+          for number in $stale; do
+            echo "Closing superseded bump PR #${number}"
+            gh pr close "$number" \
+              --delete-branch \
+              --comment "Superseded by release v${{ steps.version.outputs.value }}."
+          done
       - name: Open bump PR
         env:
           GH_TOKEN: ${{ secrets.GHTOKEN }}
