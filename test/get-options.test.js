@@ -24,7 +24,7 @@ describe('getOptions', () => {
     const config = {}
     const result = await getOptions(config)
     const expected = {
-      branches: ['master', 'main'],
+      branches: [{ name: 'master' }, { name: 'main' }],
       ci: true,
       debug: true,
       dryRun: false,
@@ -83,7 +83,7 @@ describe('getOptions', () => {
     const config = {}
     const result = await getOptions(config)
     const expected = {
-      branches: ['master', 'main'],
+      branches: [{ name: 'master' }, { name: 'main' }],
       ci: true,
       debug: true,
       dryRun: false,

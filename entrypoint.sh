@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Exit codes used by this script (kept stable so workflows can branch on them):
+#   3 — required input parameter missing or null (see verify_parameter).
+#   4 — metadata export failed to produce its output file.
+# Any other non-zero exit code propagates from the underlying tool.
+
 SCRIPT=$(basename "${BASH_SOURCE[0]}")
 
 print() {
@@ -28,7 +33,7 @@ verify_requirements() {
 
 config() {
   print "${FUNCNAME[0]}"
-  bash -c "git config --global --add safe.directory \$PWD"
+  git config --global --add safe.directory "$PWD"
 }
 
 # shellcheck disable=SC2086
