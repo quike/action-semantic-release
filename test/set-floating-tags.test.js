@@ -9,7 +9,7 @@ vi.mock('execa')
 
 describe('setFloatingTags', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
+    vi.resetAllMocks()
   })
 
   afterEach(() => {
@@ -156,12 +156,12 @@ describe('setFloatingTags', () => {
 
     const result = await setFloatingTags(release, { env: process.env })
 
-    expect(core.info).toHaveBeenCalledWith('Setting up env pre tagging with user: ' + DEFAULT_USER.USER_NAME)
-    expect(execa).toHaveBeenCalledWith('git', ['config', 'user.name', 'custom.user'], {
+    expect(core.info).toHaveBeenCalledWith('Setting up env pre tagging with user: ' + user.GIT_COMMITTER_NAME)
+    expect(execa).toHaveBeenCalledWith('git', ['config', 'user.name', user.GIT_COMMITTER_NAME], {
       cwd: process.cwd(),
       env: process.env
     })
-    expect(execa).toHaveBeenCalledWith('git', ['config', 'user.email', 'custom.user@example.com'], {
+    expect(execa).toHaveBeenCalledWith('git', ['config', 'user.email', user.GIT_COMMITTER_EMAIL], {
       cwd: process.cwd(),
       env: process.env
     })

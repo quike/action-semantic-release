@@ -49,14 +49,23 @@ export const cleanObject = (obj) => {
 /**
  * Retrieves a boolean input value from the GitHub Actions input.
  *
+ * When the input is unset or empty, returns the configured default instead of
+ * letting `core.getBooleanInput` throw (it requires a valid boolean literal).
+ *
  * @param {*} config - The name of the input to retrieve.
  * @returns {boolean} - The boolean value of the input.
  */
 export const getBooleanInput = (config) => {
   const { name, required, default: defaultValue } = config
-  const input = core.getBooleanInput(isGitLabCi() ? transformKey(name) : name, { required })
-  core.info(`${name}: ${input}`)
-  return input !== undefined ? input : defaultValue
+  const inputName = isGitLabCi() ? transformKey(name) : name
+  const rawValue = core.getInput(inputName, { required })
+  if (rawValue === '' || rawValue === undefined) {
+    core.info(`${name}: (using default) ${defaultValue}`)
+    return defaultValue
+  }
+  const value = core.getBooleanInput(inputName, { required })
+  core.info(`${name}: ${value}`)
+  return value
 }
 
 /**

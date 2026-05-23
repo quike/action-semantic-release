@@ -26,19 +26,17 @@ export async function run() {
 
     const options = await getOptions(config)
     const result = await runSemanticRelease(options, workDir)
-    if (result) {
-      const release = await verifyRelease(result)
-      if (release) {
-        let dryRunInput = getBooleanInput(INPUTS.DRY_RUN)
-        if (getBooleanInput(INPUTS.FLOATING_TAGS) && !dryRunInput) {
-          await setFloatingTags(release, { cwd: workDir, env: process.env })
-        }
-        if (getBooleanInput(INPUTS.ADD_SUMMARY) && !dryRunInput) {
-          await setSummary(release)
-        }
-      } else {
-        core.info('No release is published, stopping here.')
-      }
+    if (!result) {
+      core.info('No release is published, stopping here.')
+      return
+    }
+    const release = await verifyRelease(result)
+    const dryRunInput = getBooleanInput(INPUTS.DRY_RUN)
+    if (getBooleanInput(INPUTS.FLOATING_TAGS) && !dryRunInput) {
+      await setFloatingTags(release, { cwd: workDir, env: process.env })
+    }
+    if (getBooleanInput(INPUTS.ADD_SUMMARY) && !dryRunInput) {
+      await setSummary(release)
     }
   } catch (error) {
     console.error('Error executing action:', error)

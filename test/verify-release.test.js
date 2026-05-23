@@ -56,4 +56,48 @@ describe('verifyRelease', () => {
     expect(core.setOutput).toHaveBeenCalledWith('release-git-tag', 'v1.2.3')
     expect(core.setOutput).toHaveBeenCalledWith('release-name', 'Release 1.2.3')
   })
+
+  it('should strip pre-release suffix from major/minor/patch outputs', async () => {
+    const result = {
+      lastRelease: { version: '1.2.2', gitHead: 'def', gitTag: 'v1.2.2' },
+      nextRelease: {
+        version: '2.0.0-beta.1',
+        notes: '',
+        type: 'major',
+        channel: 'beta',
+        gitHead: 'abc',
+        gitTag: 'v2.0.0-beta.1',
+        name: 'v2.0.0-beta.1'
+      },
+      commits: []
+    }
+
+    await verifyRelease(result)
+
+    expect(core.exportVariable).toHaveBeenCalledWith('RELEASE_VERSION', '2.0.0-beta.1')
+    expect(core.exportVariable).toHaveBeenCalledWith('RELEASE_MAJOR', '2')
+    expect(core.exportVariable).toHaveBeenCalledWith('RELEASE_MINOR', '0')
+    expect(core.exportVariable).toHaveBeenCalledWith('RELEASE_PATCH', '0')
+  })
+
+  it('should always export release-published as true (function is only called when a release exists)', async () => {
+    const result = {
+      lastRelease: { version: '1.0.0', gitHead: 'old', gitTag: 'v1.0.0' },
+      nextRelease: {
+        version: '1.0.1',
+        notes: '',
+        type: 'patch',
+        channel: 'stable',
+        gitHead: 'new',
+        gitTag: 'v1.0.1',
+        name: 'v1.0.1'
+      },
+      commits: []
+    }
+
+    const release = await verifyRelease(result)
+
+    expect(release.published).toBe(true)
+    expect(core.exportVariable).toHaveBeenCalledWith('RELEASE_PUBLISHED', true)
+  })
 })

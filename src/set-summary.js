@@ -19,7 +19,7 @@ This is the summary of the semantic-release-action.
   {{#if release.published}}
 | Version                 | Type                 | Tag                    | Git Head                |
 | ----------------------- | -------------------- | ---------------------- | ----------------------- |
-| {{release.new.version}} | \` {{release.new.type}} \` | {{release.new.gitTag}} | \`{{release.new.gitHead}}\` |
+| {{release.new.version}} | \`{{release.new.type}}\` | {{release.new.gitTag}} | \`{{release.new.gitHead}}\` |
 
 ### Notes
 <details><summary>Notes</summary>{{release.new.notes}}</details>
@@ -34,7 +34,7 @@ This is the summary of the semantic-release-action.
 {{#if release.last}}
 | Version                 | Type                 | Tag                    | Git Head                |
 | ----------------------- | -------------------- | ---------------------- | ----------------------- |
-| {{release.last.version}} | \`{{default (release.last.type) "none"}} \` | {{release.last.gitTag}} | \`{{release.last.gitHead}} \`|
+| {{release.last.version}} | \`{{default (release.last.type) "none"}}\` | {{release.last.gitTag}} | \`{{release.last.gitHead}}\` |
 {{else}}
 No previous release found.
 {{/if}}

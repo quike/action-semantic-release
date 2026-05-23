@@ -81,7 +81,7 @@ const createTag = async (myTag, gitHead, options) => {
 const setUp = async (options) => {
   const userName = getEnvVar('GIT_COMMITTER_NAME', DEFAULT_USER.USER_NAME)
   const userEmail = getEnvVar('GIT_COMMITTER_EMAIL', DEFAULT_USER.USER_EMAIL)
-  core.info(`Setting up env pre tagging with user: ${DEFAULT_USER.USER_NAME}`)
+  core.info(`Setting up env pre tagging with user: ${userName}`)
   try {
     await execa('git', ['config', 'user.name', userName], options)
     await execa('git', ['config', 'user.email', userEmail], options)

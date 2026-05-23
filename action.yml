@@ -63,6 +63,8 @@ outputs:
     description: 'SHA value associated to release commit.'
   release-git-tag:
     description: 'Git Tag associated to release commit.'
+  release-name:
+    description: 'Display name of the release (typically the version with optional prefix).'
 
 runs:
   using: 'docker'

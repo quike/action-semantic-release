@@ -9,6 +9,7 @@ vi.mock('@actions/core', async () => {
   const original = await vi.importActual('@actions/core')
   return {
     ...original,
+    getInput: vi.fn().mockReturnValue('placeholder'),
     getBooleanInput: vi.fn()
   }
 })
