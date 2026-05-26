@@ -51,8 +51,12 @@ run() {
 
 validate() {
   CURRENT_SHA=$(git rev-parse HEAD)
-  echo "GIT_HEAD=${CURRENT_SHA}" >>"$GITHUB_OUTPUT"
+  # Env vars use the UPPERCASE_UNDERSCORE convention (in-job, subsequent steps).
+  # Step outputs must use the hyphenated names declared in action.yml so that
+  # `steps.<id>.outputs.release-git-head` resolves — the JS path (verify-release.js)
+  # already emits those names for the release case; this mirrors them for PR mode.
   echo "GIT_HEAD=${CURRENT_SHA}" >>"$GITHUB_ENV"
+  echo "release-git-head=${CURRENT_SHA}" >>"$GITHUB_OUTPUT"
   if [ -n "$EVENT_NAME" ] && [ "$EVENT_NAME" == "pull_request" ]; then
     print "Type of event: $EVENT_NAME"
     if [ -f "$GITHUB_EVENT_PATH" ]; then
@@ -71,8 +75,8 @@ validate() {
     print "HEAD is now at ${CURRENT_SHA} after Pull Request Commit Id merge with HEAD."
     PULL_REQUEST_VERSION=${ORIGINAL_SHA:0:7}
     print "Short SHA=${PULL_REQUEST_VERSION}"
-    echo "RELEASE_VERSION=${PULL_REQUEST_VERSION}" >>"$GITHUB_OUTPUT"
     echo "RELEASE_VERSION=${PULL_REQUEST_VERSION}" >>"$GITHUB_ENV"
+    echo "release-version=${PULL_REQUEST_VERSION}" >>"$GITHUB_OUTPUT"
   fi
 }
 
