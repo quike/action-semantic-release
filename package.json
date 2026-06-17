@@ -45,7 +45,7 @@
     "globals": "17.6.0",
     "make-coverage-badge": "1.2.0",
     "prettier": "3.8.4",
-    "prettier-eslint": "16.4.2",
+    "prettier-eslint": "17.0.0",
     "rollup": "4.62.0",
     "rollup-plugin-analyzer": "4.0.0",
     "vitest": "4.1.8"
