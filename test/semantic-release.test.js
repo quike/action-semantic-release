@@ -22,13 +22,9 @@ describe('runSemanticRelease', () => {
   })
 
   it('should call semanticRelease with the correct arguments', async () => {
-    const options = {
-      /* some options */
-    }
+    const options = {/* some options */}
     const workdir = '/path/to/workdir'
-    const result = {
-      /* some result */
-    }
+    const result = {/* some result */}
 
     // Mock the return value of semanticRelease
     semanticRelease.mockResolvedValue(result)
@@ -40,9 +36,7 @@ describe('runSemanticRelease', () => {
   })
 
   it('should handle no release published', async () => {
-    const options = {
-      /* some options */
-    }
+    const options = {/* some options */}
     const workdir = '/path/to/workdir'
 
     // Mock the return value of semanticRelease to be falsy
