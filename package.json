@@ -21,7 +21,7 @@
     "conventional-changelog-conventionalcommits": "^10.0.0",
     "conventional-changelog-ember": "^5.0.0",
     "conventional-changelog-eslint": "^6.0.0",
-    "execa": "^9.5.2",
+    "execa": "^10.0.0",
     "handlebars": "^4.7.8",
     "save-dev": "^0.0.1-security",
     "semantic-release": "^25.0.0",
