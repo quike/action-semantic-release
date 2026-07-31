@@ -5,7 +5,8 @@ import { runSemanticRelease } from './semantic-release.js'
 import { setSummary } from './set-summary.js'
 import { verifyRelease } from './verify-release.js'
 import { setFloatingTags } from './set-floating-tags.js'
-import { getBooleanInput, getInput } from './utils.js'
+import { exportCurrentVersion } from './get-last-release.js'
+import { getBooleanInput, getInput, isPullOrMergeRequest } from './utils.js'
 import { INPUTS } from './constants.js'
 
 /**
@@ -27,7 +28,16 @@ export async function run() {
     const options = await getOptions(config)
     const result = await runSemanticRelease(options, workDir)
     if (!result) {
-      core.info('No release is published, stopping here.')
+      // By default respect semantic-release: when nothing is released, emit no
+      // version. Opt in with `fallback-current-version` to set RELEASE_VERSION to
+      // the current (last released) version instead of leaving it empty. Skip on
+      // pull/merge requests, where the CI wrapper already sets a short SHA.
+      if (getBooleanInput(INPUTS.FALLBACK_CURRENT_VERSION) && !isPullOrMergeRequest()) {
+        core.info('No release is published; fallback-current-version enabled, resolving the last released version.')
+        await exportCurrentVersion(options.tagFormat, { cwd: workDir })
+      } else {
+        core.info('No release is published, stopping here.')
+      }
       return
     }
     const release = await verifyRelease(result)

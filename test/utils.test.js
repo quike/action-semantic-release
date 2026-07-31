@@ -1,5 +1,13 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { parseInput, cleanObject, getBooleanInput, getInput, isGitLabCi, transformKey } from '../src/utils.js'
+import {
+  parseInput,
+  cleanObject,
+  getBooleanInput,
+  getInput,
+  isGitLabCi,
+  isPullOrMergeRequest,
+  transformKey
+} from '../src/utils.js'
 import * as core from '@actions/core'
 import { INPUTS } from '../src/constants.js'
 
@@ -327,5 +335,37 @@ describe('isGitLabCi', () => {
     expect(result).toBe(false)
 
     process.env = originalProcessEnv // Restore process.env
+  })
+})
+
+describe('isPullOrMergeRequest', () => {
+  afterEach(() => {
+    delete process.env.EVENT_NAME
+    delete process.env.CI
+    delete process.env.GITLAB_CI
+    delete process.env.CI_MERGE_REQUEST_IID
+  })
+
+  it('returns true for a GitHub pull_request event', () => {
+    process.env.EVENT_NAME = 'pull_request'
+    expect(isPullOrMergeRequest()).toBe(true)
+  })
+
+  it('returns true for a GitLab merge request pipeline', () => {
+    process.env.CI = 'true'
+    process.env.GITLAB_CI = 'true'
+    process.env.CI_MERGE_REQUEST_IID = '42'
+    expect(isPullOrMergeRequest()).toBe(true)
+  })
+
+  it('returns false for a GitLab branch pipeline without a merge request', () => {
+    process.env.CI = 'true'
+    process.env.GITLAB_CI = 'true'
+    expect(isPullOrMergeRequest()).toBe(false)
+  })
+
+  it('returns false for a GitHub push event', () => {
+    process.env.EVENT_NAME = 'push'
+    expect(isPullOrMergeRequest()).toBe(false)
   })
 })
