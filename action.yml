@@ -47,9 +47,9 @@ inputs:
     default: 'false'
   fallback-current-version:
     description:
-      'When no release is published, set release-version to the current (last released) version resolved from git
-      tags instead of leaving it empty. Defaults to false to preserve semantic-release''s native behavior (no version
-      is emitted when nothing is released).'
+      "When no release is published, set release-version to the current (last released) version resolved from git tags
+      instead of leaving it empty. Defaults to false to preserve semantic-release's native behavior (no version is
+      emitted when nothing is released)."
     required: false
     default: 'false'
 
