@@ -45,12 +45,21 @@ inputs:
     description: 'Create floating tags from major and minor versions after release.'
     required: false
     default: 'false'
+  fallback-current-version:
+    description:
+      "When no release is published, set release-version to the current (last released) version resolved from git tags
+      instead of leaving it empty. Defaults to false to preserve semantic-release's native behavior (no version is
+      emitted when nothing is released)."
+    required: false
+    default: 'false'
 
 outputs:
   release-published:
     description: 'True if a new release is performed, false otherwise.'
   release-version:
-    description: 'New version or current version if not released, example: 1.2.3'
+    description:
+      'The published SemVer version (example: 1.2.3). Empty when no release is published, unless
+      fallback-current-version is enabled, in which case it is the current (last released) version.'
   release-major:
     description: 'New Major version of the semver, example: 1.'
   release-minor:
@@ -84,3 +93,4 @@ runs:
     - ${{ inputs.default-config }}
     - ${{ inputs.default-preset-info }}
     - ${{ inputs.floating-tags }}
+    - ${{ inputs.fallback-current-version }}

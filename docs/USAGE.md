@@ -66,14 +66,15 @@ jobs:
 
 #### Action Variables
 
-| _Variable_              | _Default_ | _Details_                                                                                               |
-| ----------------------- | --------- | ------------------------------------------------------------------------------------------------------- |
-| **add-summary**         | `true`    | Add a GitHub Job Summary with release details                                                           |
-| **debug-mode**          | `false`   | To enable verbosity                                                                                     |
-| **dry-run**             | `false`   | Dry Run execution                                                                                       |
-| **default-config**      | `true`    | Force default config if not present                                                                     |
-| **default-preset-info** | `true`    | Inject opinionated `presetConfig`/`releaseRules` when a plugin uses `preset: "custom"`; see docs/FAQ.md |
-| **floating-tags**       | `false`   | Create floating tags from major and minor versions after release.                                       |
+| _Variable_                   | _Default_ | _Details_                                                                                                                    |
+| ---------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **add-summary**              | `true`    | Add a GitHub Job Summary with release details                                                                                |
+| **debug-mode**               | `false`   | To enable verbosity                                                                                                          |
+| **dry-run**                  | `false`   | Dry Run execution                                                                                                            |
+| **default-config**           | `true`    | Force default config if not present                                                                                          |
+| **default-preset-info**      | `true`    | Inject opinionated `presetConfig`/`releaseRules` when a plugin uses `preset: "custom"`; see docs/FAQ.md                      |
+| **floating-tags**            | `false`   | Create floating tags from major and minor versions after release.                                                            |
+| **fallback-current-version** | `false`   | When no release is published, set `release-version` to the current (last released) version instead of empty. Off by default. |
 
 #### Environment Variables
 
@@ -87,17 +88,17 @@ By default semantic-release is only meant to perform releases, ignoring if furth
 (like using it in a maven project via `-Drevision=${release-version}`). But if you are in such scenarios you must update
 your release config file to force the system to publish the new versions.
 
-The Action will export multiple variables so they can be accessed within your workflows.L
+The Action will export multiple variables so they can be accessed within your workflows.
 
 ### Exported Variables
 
-| _Variable_            | _GitHub Action Output_ | _Example_                                  | _Details_                                           |
-| --------------------- | ---------------------- | ------------------------------------------ | --------------------------------------------------- |
-| **RELEASE_PUBLISHED** | **release-published**  | `true`                                     | True if a new release is published, false otherwise |
-| **RELEASE_VERSION**   | **release-version**    | `1.2.3`                                    | The new SemVer version of type X.Y.Z                |
-| **RELEASE_MAJOR**     | **release-major**      | `1`                                        | Major value of the new SemVer version               |
-| **RELEASE_MINOR**     | **release-minor**      | `2`                                        | Minor value of the new SemVer version               |
-| **RELEASE_PATCH**     | **release-patch**      | `3`                                        | Patch value of the new SemVer version               |
-| **RELEASE_TYPE**      | **release-type**       | `patch`                                    | Type of SemVer release: major, minor or patch       |
-| **RELEASE_GIT_HEAD**  | **release-git-head**   | `cddc1177c51b518b3263b1b4f2b50af77dcf8be9` | Commit ID of the release                            |
-| **RELEASE_GIT_TAG**   | **release-git-tag**    | `v1.2.3`                                   | Tag ID associated with the release                  |
+| _Variable_            | _GitHub Action Output_ | _Example_                                  | _Details_                                                                                      |
+| --------------------- | ---------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| **RELEASE_PUBLISHED** | **release-published**  | `true`                                     | True if a new release is published, false otherwise                                            |
+| **RELEASE_VERSION**   | **release-version**    | `1.2.3`                                    | New SemVer version (X.Y.Z); empty when no release unless `fallback-current-version` is enabled |
+| **RELEASE_MAJOR**     | **release-major**      | `1`                                        | Major value of the new SemVer version                                                          |
+| **RELEASE_MINOR**     | **release-minor**      | `2`                                        | Minor value of the new SemVer version                                                          |
+| **RELEASE_PATCH**     | **release-patch**      | `3`                                        | Patch value of the new SemVer version                                                          |
+| **RELEASE_TYPE**      | **release-type**       | `patch`                                    | Type of SemVer release: major, minor or patch                                                  |
+| **RELEASE_GIT_HEAD**  | **release-git-head**   | `cddc1177c51b518b3263b1b4f2b50af77dcf8be9` | Commit ID of the release                                                                       |
+| **RELEASE_GIT_TAG**   | **release-git-tag**    | `v1.2.3`                                   | Tag ID associated with the release                                                             |

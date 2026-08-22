@@ -118,3 +118,17 @@ export const transformKey = (key) => {
 export const getEnvVar = (envVar, defaultValue) => {
   return process.env[envVar] || defaultValue
 }
+
+/**
+ * Determines whether the current run is a pull request (GitHub) or merge request
+ * (GitLab). In those contexts semantic-release publishes nothing and the CI
+ * wrapper supplies RELEASE_VERSION as a short SHA, so the "last released version"
+ * fallback must not run.
+ *
+ * @returns {boolean} `true` for pull/merge request runs, otherwise `false`.
+ */
+export const isPullOrMergeRequest = () => {
+  return (
+    getEnvVar('EVENT_NAME', '') === 'pull_request' || (isGitLabCi() && getEnvVar('CI_MERGE_REQUEST_IID', '') !== '')
+  )
+}
