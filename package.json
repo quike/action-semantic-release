@@ -26,7 +26,8 @@
     "save-dev": "^0.0.1-security",
     "semantic-release": "^25.0.0",
     "semantic-release-slack-bot": "^4.0.2",
-    "semver": "^7.8.5"
+    "semver": "^7.8.5",
+    "cosmiconfig": "^10.0.0"
   },
   "devDependencies": {
     "@eslint/compat": "2.1.0",
@@ -39,7 +40,6 @@
     "@rollup/plugin-node-resolve": "16.0.3",
     "@vercel/ncc": "0.45.0",
     "@vitest/coverage-v8": "4.1.11",
-    "cosmiconfig": "9.0.2",
     "eslint": "10.8.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
