@@ -1,4 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>quike/renovate-config"]
+  "extends": ["github>quike/renovate-config"],
+  "packageRules": [
+    {
+      "matchPackageNames": ["conventional-changelog-conventionalcommits"],
+      "allowedVersions": "<10",
+      "description": "v10 renders via @conventional-changelog/template, which requires conventional-changelog-writer@9. @semantic-release/release-notes-generator pins conventional-changelog-writer@^8, so v10 throws 'Missing helper' at plugin validation. Drop this rule once release-notes-generator supports writer@9."
+    }
+  ]
 }
