@@ -21,6 +21,7 @@
     "conventional-changelog-conventionalcommits": "^9.0.0",
     "conventional-changelog-ember": "^5.0.0",
     "conventional-changelog-eslint": "^6.0.0",
+    "cosmiconfig": "^10.0.0",
     "execa": "^10.0.0",
     "handlebars": "^4.7.8",
     "save-dev": "^0.0.1-security",
@@ -39,7 +40,6 @@
     "@rollup/plugin-node-resolve": "16.0.3",
     "@vercel/ncc": "0.45.0",
     "@vitest/coverage-v8": "4.1.11",
-    "cosmiconfig": "10.0.0",
     "eslint": "10.9.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
@@ -52,7 +52,7 @@
     "vitest": "4.1.11"
   },
   "engines": {
-    "node": ">=20.18"
+    "node": "^22.22.2 || >=24.15"
   },
   "files": [
     "./src/index.js"
