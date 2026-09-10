@@ -30,7 +30,7 @@
     "semver": "^7.8.5"
   },
   "devDependencies": {
-    "@eslint/compat": "2.1.0",
+    "@eslint/compat": "2.1.1",
     "@eslint/config-array": "0.23.5",
     "@eslint/js": "10.0.1",
     "@eslint/object-schema": "3.0.5",
@@ -40,7 +40,7 @@
     "@rollup/plugin-node-resolve": "16.0.3",
     "@vercel/ncc": "0.45.0",
     "@vitest/coverage-v8": "4.1.11",
-    "eslint": "10.9.1",
+    "eslint": "10.10.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
     "globals": "17.12.0",
