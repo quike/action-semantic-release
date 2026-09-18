@@ -16,7 +16,7 @@ env:
 
 jobs:
   build-and-push-image:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
       packages: write
@@ -66,7 +66,7 @@ jobs:
     name: Bump action.yml image to released version
     needs: build-and-push-image
     if: ${{ github.event_name == 'release' }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       contents: write
       pull-requests: write
