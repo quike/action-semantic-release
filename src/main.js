@@ -43,7 +43,7 @@ export async function run() {
     }
     const release = await verifyRelease(result)
     const dryRunInput = getBooleanInput(INPUTS.DRY_RUN)
-    await writeNotes(release, { path: getInput(INPUTS.NOTES_FILE), dryRun: dryRunInput })
+    await writeNotes(release, { path: getInput(INPUTS.NOTES_FILE), dryRun: dryRunInput, cwd: workDir })
     if (getBooleanInput(INPUTS.FLOATING_TAGS) && !dryRunInput) {
       await setFloatingTags(release, { cwd: workDir, env: process.env })
     }

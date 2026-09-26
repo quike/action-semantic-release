@@ -34,15 +34,31 @@ describe('run', () => {
     vi.restoreAllMocks()
   })
 
-  it('calls writeNotes with the notes-file input and the dry-run flag', async () => {
-    core.getInput.mockImplementation((name) => (name === 'notes-file' ? 'release-notes.md' : ''))
+  it('calls writeNotes with the notes-file input, the dry-run flag, and the working directory', async () => {
+    core.getInput.mockImplementation((name) => {
+      if (name === 'notes-file') return 'release-notes.md'
+      if (name === 'working-path') return '/tmp/workdir'
+      return ''
+    })
     core.getBooleanInput.mockReturnValue(false)
 
     await run()
 
     expect(writeNotes).toHaveBeenCalledWith(
       { published: true, new: { notes: 'notes' } },
-      { path: 'release-notes.md', dryRun: false }
+      { path: 'release-notes.md', dryRun: false, cwd: '/tmp/workdir' }
+    )
+  })
+
+  it('calls writeNotes with an empty path when notes-file is unset', async () => {
+    core.getInput.mockImplementation((name) => (name === 'working-path' ? '/tmp/workdir' : ''))
+    core.getBooleanInput.mockReturnValue(false)
+
+    await run()
+
+    expect(writeNotes).toHaveBeenCalledWith(
+      { published: true, new: { notes: 'notes' } },
+      { path: '', dryRun: false, cwd: '/tmp/workdir' }
     )
   })
 })
