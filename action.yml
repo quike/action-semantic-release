@@ -52,6 +52,12 @@ inputs:
       emitted when nothing is released)."
     required: false
     default: 'false'
+  notes-file:
+    description:
+      'Optional path to write the published release notes to (markdown, UTF-8, verbatim). Empty (default) writes
+      nothing. Never written in dry-run or when no release is published.'
+    required: false
+    default: ''
 
 outputs:
   release-published:
@@ -85,6 +91,7 @@ runs:
     WORKING_PATH: ${{ inputs.working-path }}
     DEFAULT_CONFIG: ${{ inputs.default-config }}
     DEFAULT_PRESET_INFO: ${{ inputs.default-preset-info }}
+    NOTES_FILE: ${{ inputs.notes-file }}
   args:
     - ${{ inputs.working-path }}
     - ${{ inputs.dry-run }}
