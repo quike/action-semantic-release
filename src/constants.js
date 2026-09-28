@@ -15,6 +15,7 @@ const ADD_SUMMARY = { name: 'add-summary', required: false, default: true }
 const DEFAULT_CONFIG = { name: 'default-config', required: false, default: true }
 const DEFAULT_PRESET_INFO = { name: 'default-preset-info', required: false, default: true }
 const WORKING_PATH = { name: 'working-path', required: false, default: '{}' }
+const NOTES_FILE = { name: 'notes-file', required: false, default: '' }
 
 export const INPUTS = {
   DRY_RUN,
@@ -25,5 +26,6 @@ export const INPUTS = {
   ADD_SUMMARY,
   DEFAULT_CONFIG,
   DEFAULT_PRESET_INFO,
-  WORKING_PATH
+  WORKING_PATH,
+  NOTES_FILE
 }
