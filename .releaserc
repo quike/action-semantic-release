@@ -14,7 +14,7 @@
       "@semantic-release/exec",
       {
         "verifyReleaseCmd": "[ -z \"$EXPECTED_VERSION\" ] || [ \"${nextRelease.version}\" = \"$EXPECTED_VERSION\" ]",
-        "prepareCmd": "sed -i \"s|^  image: .*|  image: 'docker://ghcr.io/quike/action-semantic-release:${nextRelease.version}'|\" action.yml && grep -qxF \"  image: 'docker://ghcr.io/quike/action-semantic-release:${nextRelease.version}'\" action.yml"
+        "prepareCmd": "bash .github/scripts/set-action-image.sh ${nextRelease.version}"
       }
     ],
     [
