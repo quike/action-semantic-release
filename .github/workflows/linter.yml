@@ -17,7 +17,7 @@ permissions:
 jobs:
   lint:
     name: Lint Codebase
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout
         id: checkout
@@ -41,3 +41,4 @@ jobs:
           VALIDATE_BIOME_LINT: false
           VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
           VALIDATE_TRIVY: false
+          ACTIONLINT_CONFIG_FILE: .github/linters/actionlint.yml
