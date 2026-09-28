@@ -7,6 +7,7 @@ import { verifyRelease } from './verify-release.js'
 import { setFloatingTags } from './set-floating-tags.js'
 import { exportCurrentVersion } from './get-last-release.js'
 import { getBooleanInput, getInput, isPullOrMergeRequest } from './utils.js'
+import { writeNotes } from './write-notes.js'
 import { INPUTS } from './constants.js'
 
 /**
@@ -42,6 +43,7 @@ export async function run() {
     }
     const release = await verifyRelease(result)
     const dryRunInput = getBooleanInput(INPUTS.DRY_RUN)
+    await writeNotes(release, { path: getInput(INPUTS.NOTES_FILE), dryRun: dryRunInput, cwd: workDir })
     if (getBooleanInput(INPUTS.FLOATING_TAGS) && !dryRunInput) {
       await setFloatingTags(release, { cwd: workDir, env: process.env })
     }

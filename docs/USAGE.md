@@ -66,15 +66,25 @@ jobs:
 
 #### Action Variables
 
-| _Variable_                   | _Default_ | _Details_                                                                                                                    |
-| ---------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| **add-summary**              | `true`    | Add a GitHub Job Summary with release details                                                                                |
-| **debug-mode**               | `false`   | To enable verbosity                                                                                                          |
-| **dry-run**                  | `false`   | Dry Run execution                                                                                                            |
-| **default-config**           | `true`    | Force default config if not present                                                                                          |
-| **default-preset-info**      | `true`    | Inject opinionated `presetConfig`/`releaseRules` when a plugin uses `preset: "custom"`; see docs/FAQ.md                      |
-| **floating-tags**            | `false`   | Create floating tags from major and minor versions after release.                                                            |
-| **fallback-current-version** | `false`   | When no release is published, set `release-version` to the current (last released) version instead of empty. Off by default. |
+| _Variable_                   | _Default_ | _Details_                                                                                                                                                 |
+| ---------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **add-summary**              | `true`    | Add a GitHub Job Summary with release details                                                                                                             |
+| **debug-mode**               | `false`   | To enable verbosity                                                                                                                                       |
+| **dry-run**                  | `false`   | Dry Run execution                                                                                                                                         |
+| **default-config**           | `true`    | Force default config if not present                                                                                                                       |
+| **default-preset-info**      | `true`    | Inject opinionated `presetConfig`/`releaseRules` when a plugin uses `preset: "custom"`; see docs/FAQ.md                                                   |
+| **floating-tags**            | `false`   | Create floating tags from major and minor versions after release.                                                                                         |
+| **fallback-current-version** | `false`   | When no release is published, set `release-version` to the current (last released) version instead of empty. Off by default.                              |
+| **notes-file**               | `''`      | Path to write the published release notes to (Markdown, UTF-8, verbatim). Empty writes nothing; never written in dry-run or when no release is published. |
+
+Example, writing the published release notes to a file:
+
+```yaml
+- name: Release
+  uses: quike/action-semantic-release
+  with:
+    notes-file: release-notes.md
+```
 
 #### Environment Variables
 
