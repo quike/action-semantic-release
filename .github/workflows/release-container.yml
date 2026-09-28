@@ -1,9 +1,6 @@
-name: Release Container
+name: Build Container
 
 on:
-  release:
-    types: [published] # Other types: created, edited, deleted, prereleased, released, etc.
-
   pull_request:
     branches:
       - main
@@ -15,111 +12,29 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-image:
+  build-image:
     runs-on: ubuntu-24.04
     permissions:
       contents: read
-      packages: write
-      attestations: write
-      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - name: Run release script
-        if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          echo "Release version: ${{ github.event.release.tag_name }}"
-          echo "Release published by: ${{ github.event.release.author.login }}"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
-      - name: Log in to the Container registry
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha
-      - name: Build and Push Container
-        id: push
+      - name: Build Container
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-  bump-action-image-tag:
-    name: Bump action.yml image to released version
-    needs: build-and-push-image
-    if: ${{ github.event_name == 'release' }}
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - name: Checkout main
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          ref: main
-          token: ${{ secrets.GHTOKEN }}
-      - name: Compute released version
-        id: version
-        run: |
-          TAG_NAME="${{ github.event.release.tag_name }}"
-          VERSION="${TAG_NAME#v}"
-          echo "value=${VERSION}" >> "$GITHUB_OUTPUT"
-      - name: Update or open bump PR
-        env:
-          GH_TOKEN: ${{ secrets.GHTOKEN }}
-        run: |
-          # Renovate/Dependabot-style update-in-place: one canonical branch and
-          # PR for the bump, force-pushed and re-titled on each release. Avoids
-          # piling up duplicate PRs when several releases land back-to-back.
-          BRANCH="ci/bump-action-image"
-          VERSION="${{ steps.version.outputs.value }}"
-          TITLE="ci: bump action.yml image to ${VERSION}"
-          BODY="Auto-generated after release \`v${VERSION}\` to keep \`action.yml\` in sync with the published container image. This PR is updated in place by the release pipeline; force-pushes will overwrite manual changes."
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Reset the bump branch to the tip of main and re-apply the image update.
-          git checkout -B "${BRANCH}"
-          sed -i "s|image: 'docker://[^']*'|image: 'docker://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${VERSION}'|" ./action.yml
-          grep "image:" ./action.yml
-
-          if git diff --quiet -- action.yml; then
-            echo "action.yml already at ${VERSION} on main; nothing to bump."
-            exit 0
-          fi
-
-          git add action.yml
-          git commit -m "${TITLE}"
-          # `--force` (not `--force-with-lease`): the local branch was just created via
-          # `git checkout -B` and has no remote-tracking ref, so `--force-with-lease` would
-          # treat the remote as "stale info" and reject. This branch is bot-managed and
-          # any manual edits to it are documented as overwritten on the next release.
-          git push --force origin "${BRANCH}"
-
-          existing=$(gh pr list --head "${BRANCH}" --state open --json number --jq '.[0].number // empty')
-          if [ -n "${existing}" ]; then
-            echo "Updating existing PR #${existing}"
-            gh pr edit "${existing}" --title "${TITLE}" --body "${BODY}"
-          else
-            echo "Opening new bump PR"
-            gh pr create --base main --head "${BRANCH}" --title "${TITLE}" --body "${BODY}"
-          fi
