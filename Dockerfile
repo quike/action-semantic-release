@@ -16,6 +16,7 @@ ENV DEBUG_MODE=false
 RUN mkdir /etc/action
 WORKDIR /etc/action
 
+# Never copy action.yml: release images are built before the release commit that bumps it (#193).
 COPY --chmod=555 entrypoint.sh "/etc/action/entrypoint.sh"
 COPY --chmod=444 src/ ./src/
 COPY --chmod=444 .releaserc.default "/etc/action/.releaserc.default"
