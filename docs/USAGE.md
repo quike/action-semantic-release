@@ -75,7 +75,7 @@ jobs:
 | **default-preset-info**      | `true`    | Inject opinionated `presetConfig`/`releaseRules` when a plugin uses `preset: "custom"`; see docs/FAQ.md                                                   |
 | **floating-tags**            | `false`   | Create floating tags from major and minor versions after release.                                                                                         |
 | **fallback-current-version** | `false`   | When no release is published, set `release-version` to the current (last released) version instead of empty. Off by default.                              |
-| **notes-file**               | `''`      | Path to write the published release notes to (markdown, UTF-8, verbatim). Empty writes nothing; never written in dry-run or when no release is published. |
+| **notes-file**               | `''`      | Path to write the published release notes to (Markdown, UTF-8, verbatim). Empty writes nothing; never written in dry-run or when no release is published. |
 
 Example, writing the published release notes to a file:
 

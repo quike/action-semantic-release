@@ -54,7 +54,7 @@ inputs:
     default: 'false'
   notes-file:
     description:
-      'Optional path to write the published release notes to (markdown, UTF-8, verbatim). Empty (default) writes
+      'Optional path to write the published release notes to (Markdown, UTF-8, verbatim). Empty (default) writes
       nothing. Never written in dry-run or when no release is published.'
     required: false
     default: ''
