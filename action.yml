@@ -83,7 +83,7 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/quike/action-semantic-release:3.38.0'
+  image: 'docker://ghcr.io/quike/action-semantic-release:3.38.0@sha256:5d872ea681aa2de85a4b807b247c78e87e003f72cd2a791b91e906c4547abd31'
   env:
     DRY_RUN: ${{ inputs.dry-run }}
     DEBUG_MODE: ${{ inputs.debug-mode }}
